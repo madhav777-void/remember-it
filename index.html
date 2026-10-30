@@ -3,25 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>NER Dementia Care - Remember It | SIH North East Region</title>
+  <title>Remember It | Culturally-Inclusive Dementia Care Companion</title>
   
-  <meta name="description" content="AI-assisted, culturally tailored multilingual dementia care companion for North East India. Features 8 regional languages, voice assistance, medication tracking, cognitive stimulation, and one-touch SOS emergency support.">
-  <meta name="keywords" content="Dementia Care, North East India, Smart India Hackathon, Assamese, Manipuri, Khasi, Mizo, Bodo, Garo, Hindi, Elderly Care, Medication Tracker, SOS">
+  <meta name="description" content="Simple, culturally tailored multilingual dementia care companion for North East India. Features 8 regional languages, voice assistance, medication tracking, cognitive brain stimulation games, and emergency SOS.">
   <meta name="theme-color" content="#2E7D6E">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Open Graph / Social Sharing -->
-  <meta property="og:title" content="NER Dementia Care - Remember It">
-  <meta property="og:description" content="Accessible multilingual dementia care app for North East India with voice assistance, cognitive memory games, and emergency SOS alerts.">
-  <meta property="og:type" content="website">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="static/favicon.png">
 
-  <!-- Favicon & PWA Manifest -->
-  <link rel="icon" type="image/png" href="web/favicon.png">
-  <link rel="apple-touch-icon" href="web/icons/Icon-192.png">
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Modern Typography (Outfit + Plus Jakarta Sans) -->
+  <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,494 +21,370 @@
 </head>
 <body>
 
-  <!-- ── Top Navigation Bar ──────────────────────────────────────────────── -->
+  <!-- ── Top Navigation Bar (Clean & Accessible) ───────────────────────────── -->
   <header class="top-nav" role="banner">
     <div class="nav-container">
       
-      <!-- Brand & SIH Badge -->
-      <a href="#" class="brand-wrapper" aria-label="NER Dementia Care Home">
+      <!-- Logo & Title -->
+      <a href="#" class="brand-wrapper" aria-label="Remember It Home">
         <div class="brand-icon-box" aria-hidden="true">🌱</div>
         <div class="brand-text">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <h1 data-i18n="app_name">NER Dementia Care</h1>
-            <span class="brand-tag">SIH 2024</span>
-          </div>
-          <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 500;">
-            North East Regional Portal
-          </span>
+          <h1 data-i18n="app_name">Remember It</h1>
+          <span class="brand-subtitle">NER Dementia Care</span>
         </div>
       </a>
 
-      <!-- Navigation & Mode Actions -->
-      <div class="nav-actions">
-        
-        <!-- Screen Switcher Pills -->
-        <nav class="mode-switcher" aria-label="Mode Navigation">
-          <button class="mode-btn active" data-screen="patient">
-            <span>🧓</span>
-            <span data-i18n="patient_mode">Patient Mode</span>
-          </button>
-          <button class="mode-btn" data-screen="caregiver">
-            <span>🩺</span>
-            <span data-i18n="caregiver_mode">Caregiver Portal</span>
-          </button>
-          <button class="mode-btn" data-screen="games">
-            <span>🧩</span>
-            <span data-i18n="brain_activities">Brain Games</span>
-          </button>
-          <button class="mode-btn" data-screen="album">
-            <span>📸</span>
-            <span data-i18n="family_album">Family</span>
-          </button>
-        </nav>
+      <!-- Simple Primary Mode Switch: Patient vs Caregiver -->
+      <div class="mode-switcher-simple" role="tablist" aria-label="Portal Mode">
+        <button id="btnModePatient" class="mode-pill active" role="tab" aria-selected="true" data-mode="patient">
+          <span>🧓</span>
+          <span data-i18n="patient_mode">Patient View</span>
+        </button>
+        <button id="btnModeCaregiver" class="mode-pill" role="tab" aria-selected="false" data-mode="caregiver">
+          <span>🩺</span>
+          <span data-i18n="caregiver_mode">Caregiver View</span>
+        </button>
+      </div>
 
-        <!-- Language Selector Trigger -->
+      <!-- Actions: Language & Sound -->
+      <div class="nav-actions-simple">
         <button id="btnLangSelect" class="lang-trigger-btn" aria-label="Change Language">
           <span id="currentLangLabel">🇮🇳 English</span>
-          <span style="font-size: 0.8rem; color: var(--text-muted);">▼</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">▼</span>
         </button>
-
-        <!-- Device Simulation Toggle (Mobile phone mockup vs Wide portal) -->
-        <div class="view-toggle" title="Switch layout format">
-          <button class="view-btn" data-view="mobile">📱 Phone</button>
-          <button class="view-btn active" data-view="desktop">💻 Wide View</button>
-        </div>
-
-        <!-- Mute Sound Effects Toggle -->
-        <button id="btnMuteToggle" class="icon-btn" title="Toggle Sound Effects" aria-label="Toggle Sound">
+        <button id="btnMuteToggle" class="icon-btn" title="Toggle Sound" aria-label="Toggle Sound">
           🔊
         </button>
-
       </div>
+
     </div>
   </header>
 
-  <!-- ── Main App Viewport & Frame ───────────────────────────────────────── -->
-  <main class="app-viewport">
-    
-    <div id="deviceFrame" class="device-frame mode-desktop">
+  <!-- ── Main Content Area ────────────────────────────────────────────────── -->
+  <main class="main-layout">
+
+    <!-- ======================================================================
+         VIEW 1: PATIENT VIEW (Simple, Large Buttons, Calming & Clear)
+         ====================================================================== -->
+    <div id="patientView" class="view-section active">
       
-      <!-- Phone Bezel Notch (visible when in mobile phone mode) -->
-      <div class="phone-notch">
-        <span>9:41</span>
-        <div class="phone-notch-pill"></div>
-        <span>📶 5G 100%</span>
+      <!-- Greeting & Clock Hero -->
+      <div class="hero-card">
+        <div class="hero-top-row">
+          <div>
+            <div id="patientClock" class="clock-display">12:30 PM</div>
+            <div id="patientDate" class="date-display">Thursday, 15 October 2026</div>
+          </div>
+          <div class="weather-pill">
+            <span style="font-size: 1.8rem;">🌤️</span>
+            <div>
+              <div id="weatherTemp" style="font-weight: 800; font-size: 1.25rem;">28°C</div>
+              <div id="weatherCity" class="weather-city">Guwahati, Assam</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="greeting-bar">
+          <div class="greeting-text">
+            <h2 id="greetingTitle">Good Morning, Kaka 🙏</h2>
+            <p id="greetingSubtitle" data-i18n="welcome_greeting">
+              Welcome! You are safe and loved.
+            </p>
+          </div>
+          <button id="btnSpeakGreeting" class="btn-voice-speak" aria-label="Tap to listen to greeting">
+            <span>🔊</span>
+            <span data-i18n="tap_to_listen">Tap to Listen</span>
+          </button>
+        </div>
       </div>
 
-      <!-- ==================================================================
-           SCREEN 1: PATIENT MODE (Elderly-Friendly High Contrast)
-           ================================================================== -->
-      <section id="patientScreen" class="screen active" aria-label="Patient Screen">
+      <!-- Section Navigation Pills (Easy Jump) -->
+      <div class="quick-nav">
+        <a href="#sectionMeds" class="quick-nav-pill">
+          <span>💊</span>
+          <span data-i18n="daily_medicine">Daily Medicines</span>
+        </a>
+        <a href="#sectionGame" class="quick-nav-pill">
+          <span>🧩</span>
+          <span data-i18n="brain_activities">Brain Game</span>
+        </a>
+        <a href="#sectionFamily" class="quick-nav-pill">
+          <span>📸</span>
+          <span data-i18n="family_album">Loved Ones</span>
+        </a>
+      </div>
+
+      <!-- SECTION 1: Daily Medicine Checklist -->
+      <section id="sectionMeds" class="content-block">
+        <div class="block-header">
+          <div class="block-title">
+            <span class="block-icon">💊</span>
+            <h3 data-i18n="daily_medicine">Daily Medicines</h3>
+          </div>
+          <span id="medsStatusSummary" class="status-badge">Tap checkmark when taken</span>
+        </div>
         
-        <!-- Top Hero: Time, Weather, Personalized Greeting -->
-        <div class="patient-header">
-          <div class="clock-weather-row">
-            <div>
-              <div id="patientClock" class="patient-clock">12:30 PM</div>
-              <div id="patientDate" class="patient-date">Thursday, 15 October 2026</div>
-            </div>
-            
-            <div class="weather-badge" title="Live Weather in North East Region">
-              <span>🌤️</span>
-              <div>
-                <span id="weatherTemp" style="font-size: 1.15rem; font-weight: 800;">28°C</span>
-                <span id="weatherCity" class="weather-city">Guwahati, Assam</span>
-              </div>
-            </div>
-          </div>
+        <div id="patientMedsList" class="meds-simple-list">
+          <!-- Populated dynamically via JS / Python API -->
+        </div>
+      </section>
 
-          <!-- Personalized Voice Greeting Banner -->
-          <div class="greeting-box">
-            <div class="greeting-text">
-              <h2 id="greetingTitle">Good Morning! 🙏</h2>
-              <p id="greetingSubtitle" data-i18n="welcome_greeting">
-                Welcome! You are safe and loved.
-              </p>
-            </div>
-            <button id="btnSpeakGreeting" class="voice-speak-btn" title="Tap to listen to greeting" aria-label="Speak Greeting">
-              🔊
-            </button>
+      <!-- SECTION 2: Brain Activities - Interactive Physics Memory Match Game -->
+      <section id="sectionGame" class="content-block">
+        <div class="block-header">
+          <div class="block-title">
+            <span class="block-icon">🧩</span>
+            <h3 data-i18n="brain_activities">Memory Match Game</h3>
           </div>
+          <button id="btnRestartGame" class="btn-secondary-simple">
+            <span>🔄</span>
+            <span>Restart Game</span>
+          </button>
+        </div>
+        
+        <p class="game-instruction">Tap cards to flip and find the matching North East cultural symbols!</p>
+
+        <!-- Stats Bar -->
+        <div class="game-stats-bar">
+          <div id="gameMoves" class="stat-pill">Moves: 0</div>
+          <div id="gameMatches" class="stat-pill">Matches: 0/6</div>
         </div>
 
-        <!-- Main Action Cards (Big, High-Contrast Touch Targets) -->
-        <div class="patient-content">
-          <div class="cards-stack">
-            
-            <!-- 1. Daily Medicine Card -->
-            <div id="cardDailyMeds" class="action-card card-meds" role="button" tabindex="0">
-              <div class="card-icon-bubble">💊</div>
-              <div class="card-details">
-                <h3 data-i18n="daily_medicine">Daily Medicine</h3>
-                <p data-i18n="daily_routine">Morning, Afternoon & Night Doses</p>
-                <span id="medsBadge" class="card-badge">3 pending today</span>
-              </div>
-              <div class="card-arrow" aria-hidden="true">➔</div>
-            </div>
+        <!-- 3D Physics Flip Cards Grid -->
+        <div id="memoryGrid" class="memory-grid" role="region" aria-label="Memory Card Grid">
+          <!-- Populated with 3D flip physics cards by JS -->
+        </div>
+      </section>
 
-            <!-- 2. Brain Activities & Memory Games -->
-            <div id="cardBrainGames" class="action-card card-brain" role="button" tabindex="0">
-              <div class="card-icon-bubble">🧩</div>
-              <div class="card-details">
-                <h3 data-i18n="brain_activities">Brain Activities</h3>
-                <p>Memory Match • Rhymes • NER Cultural Quiz</p>
-                <span class="card-badge">Stimulate Memory</span>
-              </div>
-              <div class="card-arrow" aria-hidden="true">➔</div>
-            </div>
-
-            <!-- 3. Family Album & Loved Ones -->
-            <div id="cardFamilyAlbum" class="action-card card-album" role="button" tabindex="0">
-              <div class="card-icon-bubble">📸</div>
-              <div class="card-details">
-                <h3 data-i18n="family_album">Family Album</h3>
-                <p>Your loving daughter, grandson & family</p>
-                <span class="card-badge">4 Loved Ones</span>
-              </div>
-              <div class="card-arrow" aria-hidden="true">➔</div>
-            </div>
-
-            <!-- 4. Daily Routine / Schedule -->
-            <div class="action-card card-routine" role="button" tabindex="0">
-              <div class="card-icon-bubble">⏰</div>
-              <div class="card-details">
-                <h3 data-i18n="daily_routine">Daily Routine</h3>
-                <p>Morning Walk • Warm Tea • Gentle Rest</p>
-                <span class="card-badge">On Track</span>
-              </div>
-              <div class="card-arrow" aria-hidden="true">➔</div>
-            </div>
-
+      <!-- SECTION 3: Family Photo Reminiscence -->
+      <section id="sectionFamily" class="content-block">
+        <div class="block-header">
+          <div class="block-title">
+            <span class="block-icon">📸</span>
+            <h3 data-i18n="family_album">My Loved Ones</h3>
           </div>
-
-          <!-- Switch to Caregiver button -->
-          <div class="quick-caregiver-bar">
-            <button id="btnSwitchCaregiver" class="btn-caregiver-switch">
-              <span>🩺</span>
-              <span data-i18n="caregiver_mode">Open Caregiver Dashboard</span>
-            </button>
-          </div>
-
+          <span class="status-badge">Tap photo to hear voice note</span>
         </div>
 
-        <!-- Persistent Floating SOS Emergency Button -->
-        <div class="sos-floating-container">
-          <button id="btnSosTrigger" class="btn-sos" aria-label="Trigger Emergency SOS">
-            <span class="sos-icon">🚨</span>
-            <span data-i18n="sos_button">SOS – Help Me!</span>
+        <div id="familyAlbumGrid" class="family-simple-grid">
+          <!-- Populated dynamically via JS / Python API -->
+        </div>
+      </section>
+
+      <!-- Reassuring Floating SOS Button -->
+      <div class="sos-container">
+        <button id="btnFloatingSos" class="sos-big-btn" aria-label="Emergency Help SOS">
+          <div class="sos-pulse-ring"></div>
+          <span class="sos-icon">🆘</span>
+          <div class="sos-text">
+            <span class="sos-label" data-i18n="sos_button">EMERGENCY HELP (SOS)</span>
+            <span class="sos-sublabel">Tap for immediate assistance • Doctors & Family</span>
+          </div>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ======================================================================
+         VIEW 2: CAREGIVER VIEW (Clean Health & Adherence Dashboard)
+         ====================================================================== -->
+    <div id="caregiverView" class="view-section" style="display: none;">
+      
+      <!-- Patient Overview Card -->
+      <div class="caregiver-summary-card">
+        <div class="caregiver-patient-header">
+          <div class="patient-avatar-box">🧓</div>
+          <div>
+            <h2>Bimal Hazarika</h2>
+            <p>Age: 73 • Mild Cognitive Impairment (Dementia Stage 2)</p>
+          </div>
+          <span class="safe-status-badge">🟢 Inside Safe Zone</span>
+        </div>
+
+        <div class="vitals-row">
+          <div class="vital-item">
+            <span class="vital-label">Heart Rate</span>
+            <span class="vital-val">74 <small>bpm</small></span>
+            <span class="vital-status">Normal</span>
+          </div>
+          <div class="vital-item">
+            <span class="vital-label">Blood Pressure</span>
+            <span class="vital-val">120/80 <small>mmHg</small></span>
+            <span class="vital-status">Normal</span>
+          </div>
+          <div class="vital-item">
+            <span class="vital-label">Current Location</span>
+            <span class="vital-val" style="font-size: 1.1rem;">Guwahati, Assam</span>
+            <span class="vital-status">At Home</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Medication Administration -->
+      <div class="content-block">
+        <div class="block-header">
+          <div class="block-title">
+            <span class="block-icon">📋</span>
+            <h3>Prescription & Medication Tracker</h3>
+          </div>
+          <button id="btnAddMedModalOpen" class="btn-primary-simple">
+            <span>+</span> Add Medicine
           </button>
         </div>
 
-      </section>
+        <div id="caregiverMedsTable" class="meds-caregiver-list">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
 
-      <!-- ==================================================================
-           SCREEN 2: CAREGIVER DASHBOARD & CLINICAL PORTAL
-           ================================================================== -->
-      <section id="caregiverScreen" class="screen" aria-label="Caregiver Screen">
-        
-        <div class="caregiver-header">
-          <div class="caregiver-title-row">
+      <!-- 7-Day Cognitive Score Trend Chart -->
+      <div class="content-block">
+        <div class="block-header">
+          <div class="block-title">
+            <span class="block-icon">📊</span>
+            <h3 data-i18n="score_trend">7-Day Cognitive Score Trend</h3>
+          </div>
+          <span class="status-badge">Average: 84 / 100</span>
+        </div>
+
+        <div class="chart-box">
+          <svg id="cognitiveChart" class="chart-svg" viewBox="0 0 500 180" preserveAspectRatio="none">
+            <!-- Rendered by JS -->
+          </svg>
+          <div id="chartDays" class="chart-days-row"></div>
+        </div>
+      </div>
+
+      <!-- Emergency Helpline Directory -->
+      <div class="content-block">
+        <div class="block-header">
+          <div class="block-title">
+            <span class="block-icon">📞</span>
+            <h3>Emergency Contacts</h3>
+          </div>
+        </div>
+
+        <div class="contacts-grid">
+          <a href="tel:108" class="contact-card ambulance">
+            <span style="font-size: 1.8rem;">🚑</span>
             <div>
-              <h2 data-i18n="caregiver_mode">Caregiver Portal</h2>
-              <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; margin-top: 2px;">
-                Comprehensive patient safety, cognitive score & medicine administration
-              </p>
+              <strong>Ambulance (Emergency)</strong>
+              <div>Dial 108</div>
             </div>
-            <span class="badge-tag" style="background: rgba(255,255,255,0.2); color:#fff;">
-              🟢 Active Monitoring
-            </span>
-          </div>
-
-          <!-- Patient Profile Card -->
-          <div class="patient-badge-card">
-            <div class="patient-avatar">👴</div>
-            <div class="patient-meta">
-              <h4>Mr. Biren Sharma, 74 yrs</h4>
-              <p>Stage 2 Mild Cognitive Impairment (MCI) • Ulubari, Guwahati</p>
-            </div>
-            <div class="status-pill-safe">
-              <div class="status-dot"></div>
-              <span>Safe at Home</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Caregiver Content Panels -->
-        <div class="caregiver-content">
-          
-          <!-- Panel 1: Medication Matrix -->
-          <div class="dashboard-panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span>💊</span>
-                <span data-i18n="medication_tracker">Medication Tracker</span>
-              </div>
-              <button id="btnAddMedModalOpen" class="btn-panel-action">
-                + Add Medicine
-              </button>
-            </div>
-
-            <div id="medicationList" class="med-list">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
-
-          <!-- Panel 2: 7-Day Cognitive Score Analytics -->
-          <div class="dashboard-panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span>📈</span>
-                <span data-i18n="score_trend">Score Trend (7 days)</span>
-              </div>
-              <span style="font-size: 0.82rem; font-weight: 700; color: var(--primary);">
-                Current: 75/100 (+4%)
-              </span>
-            </div>
-
-            <!-- SVG Sparkline / Interactive Line Chart -->
-            <div class="chart-container">
-              <svg id="cognitiveSvg" class="chart-svg" viewBox="0 0 360 150">
-                <!-- Injected via JS -->
-              </svg>
-              <div id="chartDays" class="chart-labels">
-                <!-- Days row injected via JS -->
-              </div>
-            </div>
-
-            <div class="score-summary-stats">
-              <div class="stat-box">
-                <div class="stat-value">94%</div>
-                <div class="stat-label">Adherence</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-value">Stable</div>
-                <div class="stat-label">Recall State</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-value">Safe</div>
-                <div class="stat-label">Geofence</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Panel 3: Emergency Contacts Directory -->
-          <div class="dashboard-panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span>📞</span>
-                <span>Emergency Contacts</span>
-              </div>
-              <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">
-                One-touch dial
-              </span>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-info">
-                <h4>Dr. P. K. Baruah</h4>
-                <p>Lead Neurologist • GMCH Guwahati</p>
-              </div>
-              <a href="tel:+919876543210" class="btn-call">📞 Call</a>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-info">
-                <h4>Riya Sharma</h4>
-                <p>Primary Caregiver / Daughter</p>
-              </div>
-              <a href="tel:+919864012345" class="btn-call">📞 Call</a>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-info">
-                <h4>Guwahati Emergency (108)</h4>
-                <p>Assam Ambulance Services</p>
-              </div>
-              <a href="tel:108" class="btn-call" style="background: var(--sos);">🚨 108</a>
-            </div>
-          </div>
-
-          <!-- Panel 4: Daily Care Notes & Activity Log -->
-          <div class="dashboard-panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span>📝</span>
-                <span>Daily Activity & Care Log</span>
-              </div>
-              <span class="badge-tag" data-i18n="online_sync">Synced to Cloud</span>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem;">
-              <div style="padding: 10px; background: var(--surface-alt); border-radius: var(--radius-md);">
-                <strong>08:15 AM:</strong> Morning Donepezil dose confirmed taken by patient.
-              </div>
-              <div style="padding: 10px; background: var(--surface-alt); border-radius: var(--radius-md);">
-                <strong>10:30 AM:</strong> Completed 1 session of Memory Match (Score: 6/6). Mind alert.
-              </div>
-              <div style="padding: 10px; background: var(--surface-alt); border-radius: var(--radius-md);">
-                <strong>12:30 PM:</strong> Lunch served with family. Patient recognized granddaughter.
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ==================================================================
-           SCREEN 3: MEMORY MATCH BRAIN GAME
-           ================================================================== -->
-      <section id="gamesScreen" class="screen" aria-label="Memory Game Screen">
-        
-        <div class="game-container">
-          <div class="game-header">
+          </a>
+          <a href="tel:112" class="contact-card police">
+            <span style="font-size: 1.8rem;">🚨</span>
             <div>
-              <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;">
-                🧠 Memory Pair Match
-              </h2>
-              <p style="font-size: 0.9rem; color: var(--text-muted);">
-                Find matching pairs of cultural North East symbols
-              </p>
+              <strong>National Helpline</strong>
+              <div>Dial 112</div>
             </div>
-            
-            <button id="btnRestartGame" class="btn-panel-action" style="padding: 8px 16px;">
-              🔄 Restart
-            </button>
-          </div>
-
-          <div class="game-stats" style="margin-bottom: 16px;">
-            <div id="gameMoves" class="game-stat-pill">Moves: 0</div>
-            <div id="gameMatches" class="game-stat-pill">Matches: 0/6</div>
-          </div>
-
-          <!-- 12-Card Grid -->
-          <div id="memoryGrid" class="memory-grid">
-            <!-- Cards rendered via JS -->
-          </div>
+          </a>
+          <a href="tel:+919435012345" class="contact-card doctor">
+            <span style="font-size: 1.8rem;">👨‍⚕️</span>
+            <div>
+              <strong>Dr. Sharma (GMCH Neurologist)</strong>
+              <div>+91 94350 12345</div>
+            </div>
+          </a>
+          <a href="tel:+919864054321" class="contact-card family">
+            <span style="font-size: 1.8rem;">📞</span>
+            <div>
+              <strong>Rohit Hazarika (Son)</strong>
+              <div>+91 98640 54321</div>
+            </div>
+          </a>
         </div>
-
-      </section>
-
-      <!-- ==================================================================
-           SCREEN 4: FAMILY REMINISCENCE ALBUM
-           ================================================================== -->
-      <section id="albumScreen" class="screen" aria-label="Family Album Screen">
-        
-        <div class="album-container">
-          <div style="margin-bottom: 20px;">
-            <h2 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 800;">
-              👨‍👩‍👧‍👦 Family Reminiscence Album
-            </h2>
-            <p style="font-size: 0.95rem; color: var(--text-muted);">
-              Tap on any family member to hear their voice and remember loving memories.
-            </p>
-          </div>
-
-          <div id="familyAlbumGrid" class="album-grid">
-            <!-- Rendered via JS -->
-          </div>
-        </div>
-
-      </section>
+      </div>
 
     </div>
 
   </main>
 
-  <!-- ── MODAL 1: LANGUAGE SELECTOR ──────────────────────────────────────── -->
-  <div id="langModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="langModalTitle">
-    <div class="modal-dialog">
+  <!-- ── MODAL: Language Selector ─────────────────────────────────────────── -->
+  <div id="langModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box modal-lang">
       <div class="modal-header">
-        <h3 id="langModalTitle" data-i18n="select_language">Select Your Language</h3>
-        <button id="btnCloseLang" class="modal-close-btn" aria-label="Close modal">✕</button>
+        <h3 data-i18n="select_language">Select Your Language</h3>
+        <button id="btnCloseLangModal" class="btn-close" aria-label="Close">✕</button>
       </div>
-      <div class="modal-body">
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
-          Choose your native North East dialect. You can tap the 🔊 speaker to preview pronunciation.
-        </p>
-        <div id="langGrid" class="lang-grid">
-          <!-- Injected via JS -->
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+        Choose your preferred North East regional language for voice and text:
+      </p>
+      <div id="langGrid" class="lang-selection-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL: SOS Emergency Triggered ────────────────────────────────────── -->
+  <div id="sosModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box modal-sos">
+      <div class="sos-modal-header">
+        <div class="sos-modal-icon">🚨</div>
+        <div>
+          <h2>EMERGENCY ALERT SENT</h2>
+          <p>Help is on the way. Please stay calm and safe.</p>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- ── MODAL 2: SOS EMERGENCY ALERT ────────────────────────────────────── -->
-  <div id="sosModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="sosModalTitle">
-    <div class="modal-dialog sos-dialog">
-      <div class="sos-beacon">🚨</div>
-      <h2 id="sosModalTitle">EMERGENCY SOS ALERT!</h2>
-      <p>Your primary caregiver, family members, and local emergency services have been alerted.</p>
-      
-      <div class="sos-location-card">
-        📍 <strong>Current Location:</strong><br>
-        26.1445° N, 91.7362° E (Ulubari Safe Perimeter, Guwahati, Assam)
+      <div class="sos-location-info">
+        <div><strong>Patient:</strong> Bimal Hazarika (Age 73)</div>
+        <div><strong>GPS Location:</strong> Guwahati, Assam (26.1445° N, 91.7362° E)</div>
+        <div><strong>Status:</strong> Caregiver and emergency services have been alerted</div>
       </div>
 
-      <div class="sos-actions-stack">
+      <div class="sos-actions-row">
         <a href="tel:108" class="btn-sos-call">
-          <span>🚑</span> Call Ambulance (108)
+          <span>🚑</span> Call 108 Ambulance
         </a>
-        <a href="tel:112" class="btn-sos-call" style="background: #C2185B;">
-          <span>🚓</span> Call Police Helpline (112)
+        <a href="tel:112" class="btn-sos-call secondary">
+          <span>🚨</span> Call 112 Police
         </a>
-        <button id="btnSosCancel" class="btn-sos-cancel">
-          I am safe now • Cancel Alert
-        </button>
       </div>
+
+      <button id="btnCloseSosModal" class="btn-cancel-sos">
+        I am safe now • Close Alert
+      </button>
     </div>
   </div>
 
-  <!-- ── MODAL 3: ADD MEDICATION ─────────────────────────────────────────── -->
-  <div id="addMedModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="addMedTitle">
-    <div class="modal-dialog" style="max-width: 440px;">
+  <!-- ── MODAL: Add Medication (Caregiver) ─────────────────────────────────── -->
+  <div id="addMedModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box">
       <div class="modal-header">
-        <h3 id="addMedTitle" data-i18n="add_medication">Add Medication</h3>
-        <button id="btnCloseAddMed" class="modal-close-btn" aria-label="Close modal">✕</button>
+        <h3 data-i18n="add_medication">Add New Medication</h3>
+        <button id="btnCloseAddMed" class="btn-close" aria-label="Close">✕</button>
       </div>
-      <div class="modal-body">
-        <form id="formAddMed">
-          <div class="form-group">
-            <label for="inputMedName">Medicine Name & Dosage</label>
-            <input type="text" id="inputMedName" class="form-input" placeholder="e.g. Donepezil 10mg" required>
-          </div>
-          <div class="form-group">
-            <label for="inputMedTime">Scheduled Time</label>
-            <input type="text" id="inputMedTime" class="form-input" placeholder="e.g. 08:30 AM" required>
-          </div>
-          <div class="form-group">
-            <label for="inputMedNote">Instructions / Notes</label>
-            <input type="text" id="inputMedNote" class="form-input" placeholder="e.g. After breakfast with warm water">
-          </div>
-          <button type="submit" class="btn-submit-med" data-i18n="save">Save Medication</button>
-        </form>
-      </div>
+      <form id="formAddMed">
+        <div class="form-group">
+          <label for="inputMedName">Medicine Name & Dosage</label>
+          <input type="text" id="inputMedName" placeholder="e.g. Donepezil 5mg" required>
+        </div>
+        <div class="form-group">
+          <label for="inputMedTime">Schedule / Time</label>
+          <select id="inputMedTime">
+            <option value="Morning (08:00 AM)">Morning (08:00 AM)</option>
+            <option value="Afternoon (01:00 PM)">Afternoon (01:00 PM)</option>
+            <option value="Evening (07:30 PM)">Evening (07:30 PM)</option>
+            <option value="Bedtime (09:30 PM)">Bedtime (09:30 PM)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="inputMedPurpose">Purpose / Notes</label>
+          <input type="text" id="inputMedPurpose" placeholder="e.g. Memory & Cognitive support">
+        </div>
+        <div class="form-actions">
+          <button type="button" id="btnCancelAddMed" class="btn-secondary-simple">Cancel</button>
+          <button type="submit" class="btn-primary-simple">Save Medication</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <!-- ── Site Footer ─────────────────────────────────────────────────────── -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-content">
-      <div class="footer-badges">
-        <span class="badge-tag">Assam</span>
-        <span class="badge-tag">Manipur</span>
-        <span class="badge-tag">Meghalaya</span>
-        <span class="badge-tag">Mizoram</span>
-        <span class="badge-tag">Bodoland</span>
-        <span class="badge-tag">Garo Hills</span>
-        <span class="badge-tag">WCAG AA Compliant</span>
-        <span class="badge-tag">Vercel Ready</span>
-      </div>
-      <p>
-        <strong>NER Dementia Care - Remember It</strong> • Smart India Hackathon Project
-      </p>
-      <p style="font-size: 0.78rem;">
-        Empowering dementia patients and caregivers across North East India with culturally inclusive technology.
-      </p>
-    </div>
-  </footer>
+  <!-- Toast Notifications -->
+  <div id="toast" class="toast-container" aria-live="polite"></div>
 
-  <!-- Main JavaScript Engine -->
+  <!-- Main Application Script -->
   <script src="app.js"></script>
 </body>
 </html>
