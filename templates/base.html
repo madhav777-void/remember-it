@@ -469,9 +469,13 @@
             <span>💊</span>
             <span>Medicines</span>
           </a>
-          <a href="/patient/game" class="nav-link-item {% if request.path == '/patient/game' %}active{% endif %}">
+          <a href="/patient/games" class="nav-link-item {% if '/patient/game' in request.path %}active{% endif %}">
             <span>🧩</span>
-            <span>Brain Game</span>
+            <span>Brain Games</span>
+          </a>
+          <a href="/patient/lifestory" class="nav-link-item {% if request.path == '/patient/lifestory' %}active{% endif %}">
+            <span>📖</span>
+            <span>Life Story</span>
           </a>
           <a href="/patient/family" class="nav-link-item {% if request.path == '/patient/family' %}active{% endif %}">
             <span>📸</span>
@@ -482,13 +486,21 @@
             <span>📊</span>
             <span>Dashboard</span>
           </a>
+          <a href="/caregiver/care-management" class="nav-link-item {% if request.path == '/caregiver/care-management' %}active{% endif %}">
+            <span>📋</span>
+            <span>Care Management (22 Modules)</span>
+          </a>
+          <a href="/patient/lifestory" class="nav-link-item {% if request.path == '/patient/lifestory' %}active{% endif %}">
+            <span>📖</span>
+            <span>Life Story</span>
+          </a>
           <a href="/patient/medicines" class="nav-link-item {% if request.path == '/patient/medicines' %}active{% endif %}">
             <span>💊</span>
             <span>Prescriptions</span>
           </a>
-          <a href="/patient/game" class="nav-link-item {% if request.path == '/patient/game' %}active{% endif %}">
+          <a href="/patient/games" class="nav-link-item {% if '/patient/game' in request.path %}active{% endif %}">
             <span>🧩</span>
-            <span>Memory Game</span>
+            <span>Brain Games</span>
           </a>
           <a href="/caregiver/emergency" class="nav-link-item {% if request.path == '/caregiver/emergency' %}active{% endif %}">
             <span>🚨</span>

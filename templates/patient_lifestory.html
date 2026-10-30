@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block title %}My Life Story Profile | Remember It NER Dementia Care{% endblock %}
+
+{% block extra_head %}
+<style>
+  .lifestory-hero {
+    background: linear-gradient(135deg, #184E44 0%, #2E7D6E 60%, #4FA393 100%);
+    border-radius: var(--radius-xl);
+    padding: 36px 32px;
+    color: #FFFFFF;
+    margin-bottom: 26px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lifestory-hero::after {
+    content: '📖';
+    position: absolute;
+    right: 20px;
+    bottom: -15px;
+    font-size: 9rem;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .lifestory-hero h2 {
+    font-family: var(--font-heading);
+    font-size: 2.3rem;
+    font-weight: 900;
+  }
+
+  .lifestory-hero p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+    margin-top: 6px;
+    max-width: 640px;
+  }
+
+  /* Life Chapters Grid */
+  .story-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 22px;
+    transition: transform 0.2s;
+  }
+
+  .story-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--surface-border);
+  }
+
+  .story-icon {
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .story-card-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .story-content-p {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: var(--text-body);
+  }
+
+  /* Timeline */
+  .timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .timeline-item {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .timeline-year {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+  }
+
+  .timeline-desc {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  /* Music Player Cards */
+  .music-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .music-card {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .btn-play-song {
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Life Story Hero Banner -->
+<div class="lifestory-hero">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+    <a href="{{ '/caregiver/care-management' if session.get('user_role') == 'caregiver' else '/patient' }}" class="btn-action-small" style="background:rgba(255,255,255,0.25); color:#fff;">
+      ← Back
+    </a>
+    <span style="background:rgba(255,255,255,0.2); padding:6px 14px; border-radius:9999px; font-weight:800; font-size:0.85rem;">
+      ✨ Special Person-Centred Life Story Profile
+    </span>
+  </div>
+  <h2>Bimal Hazarika's Life Story</h2>
+  <p>A celebration of lifelong memories, achievements, cherished family bonds, and cultural heritage from the Brahmaputra Valley.</p>
+</div>
+
+<!-- Chapter 1: Childhood & Roots -->
+<div class="story-card">
+  <div class="story-card-header">
+    <div class="story-icon">🌅</div>
+    <div>
+      <h3>Childhood & Family Roots</h3>
+      <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Tezpur, Assam • Brahmaputra Riverbank</span>
+    </div>
+  </div>
+  <p class="story-content-p">
+    {{ life_story.childhood }} He fondly recalls the aroma of early morning Assam tea prepared by his mother, hearing monsoon rains on tin roofs, and swimming with his brothers in freshwater ponds.
+  </p>
+</div>
+
+<!-- Chapter 2: Life Timeline & Important Milestones -->
+<div class="story-card">
+  <div class="story-card-header">
+    <div class="story-icon">📜</div>
+    <div>
+      <h3>Important Life Events & Milestones</h3>
+      <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">A journey of service, family, and honor</span>
+    </div>
+  </div>
+  
+  <div class="timeline-list">
+    {% for ev in life_story.life_events %}
+    <div class="timeline-item">
+      <span class="timeline-year">{{ ev.year }}</span>
+      <span class="timeline-desc">{{ ev.title }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Chapter 3: Occupation & Life in Kaziranga -->
+<div class="story-card">
+  <div class="story-card-header">
+    <div class="story-icon">🦏</div>
+    <div>
+      <h3>Working Life in the Forest Service</h3>
+      <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Guardian of Assam's Wildlife</span>
+    </div>
+  </div>
+  <p class="story-content-p">
+    {{ life_story.occupation }} Bimal dedicated his life to protecting the majestic One-Horned Rhinoceros, Asian Elephants, and Royal Bengal Tigers. His eyes light up whenever anyone mentions Kaziranga or shows him photographs of wild rhinos grazing in tall elephant grass.
+  </p>
+</div>
+
+<!-- Chapter 4: Favorite Music & Melodies -->
+<div class="story-card">
+  <div class="story-card-header">
+    <div class="story-icon">🎵</div>
+    <div>
+      <h3>Favorite Songs & Soulful Melodies</h3>
+      <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Music that brings peace, calm, and nostalgia</span>
+    </div>
+  </div>
+  
+  <p class="story-content-p" style="margin-bottom:12px;">
+    Music is a powerful therapeutic tool for dementia care. These songs instantly reduce agitation and bring a warm smile:
+  </p>
+
+  <div class="music-grid">
+    {% for song in life_story.music %}
+    <div class="music-card">
+      <div>
+        <strong>{{ song }}</strong>
+        <div style="font-size:0.82rem; color:var(--text-muted);">Assamese Cultural Heritage</div>
+      </div>
+      <button class="btn-play-song" onclick="speakSong('{{ song }}')">
+        <span>▶️</span> Play Melody
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Chapter 5: Comfort & Safety Care Guide -->
+<div class="story-card" style="border-left: 6px solid #22C55E;">
+  <div class="story-card-header">
+    <div class="story-icon" style="background:#DCFCE7;">🌿</div>
+    <div>
+      <h3>What Makes Him Happy & Feel Safe</h3>
+      <span style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">Caregiver & Nursing Best Practices</span>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+    <div style="background:#F0FDF4; border:1.5px solid #BBF7D0; border-radius:var(--radius-lg); padding:18px;">
+      <h4 style="font-family:var(--font-heading); color:#166534; font-size:1.15rem; margin-bottom:10px;">
+        ✨ What Calms & Comforts Him:
+      </h4>
+      <ul style="padding-left:18px; line-height:1.7; color:#14532D; font-weight:600;">
+        {% for c in life_story.comfort_triggers %}
+        <li>{{ c }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div style="background:#FEF2F2; border:1.5px solid #FECACA; border-radius:var(--radius-lg); padding:18px;">
+      <h4 style="font-family:var(--font-heading); color:#991B1B; font-size:1.15rem; margin-bottom:10px;">
+        ⚠️ What Causes Distress (Avoid):
+      </h4>
+      <ul style="padding-left:18px; line-height:1.7; color:#7F1D1D; font-weight:600;">
+        {% for d in life_story.distress_triggers %}
+        <li>{{ d }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function speakSong(title) {
+    if (window.soundEngine) window.soundEngine.playChime();
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(`Playing soothing melody: ${title}. Relax and enjoy the memories.`);
+      u.rate = 0.88;
+      window.speechSynthesis.speak(u);
+    }
+  }
+</script>
+{% endblock %}

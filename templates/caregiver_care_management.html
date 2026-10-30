@@ -1,0 +1,899 @@
+{% extends "base.html" %}
+
+{% block title %}Dementia Patient Care Management (22 Modules) | Remember It{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ── Care Management Header ─────────────────────────────────────────────── */
+  .cm-header {
+    background: linear-gradient(135deg, #1B4D43 0%, #2E7D6E 100%);
+    border-radius: var(--radius-xl);
+    padding: 28px 32px;
+    color: #FFFFFF;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .cm-title-area h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1.15;
+  }
+
+  .cm-title-area p {
+    font-size: 1rem;
+    opacity: 0.92;
+    margin-top: 4px;
+  }
+
+  .cm-badge-tag {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── 6 Clinical Suite Tabs ──────────────────────────────────────────────── */
+  .suite-tabs-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 24px;
+  }
+
+  .suite-tab-btn {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 12px 20px;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-body);
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .suite-tab-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .suite-tab-btn.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+    box-shadow: 0 4px 14px var(--primary-glow);
+  }
+
+  /* ── Suite Panels ───────────────────────────────────────────────────────── */
+  .suite-panel {
+    display: none;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .suite-panel.active {
+    display: flex;
+  }
+
+  /* ── Clinical Module Cards ──────────────────────────────────────────────── */
+  .module-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 26px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--surface-border);
+  }
+
+  .module-header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .module-header-title h3 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .module-num-badge {
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+    font-size: 0.8rem;
+    font-weight: 900;
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+  }
+
+  /* Tables & Lists */
+  .clinical-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 10px;
+    font-size: 0.95rem;
+  }
+
+  .clinical-table th {
+    background: var(--surface-alt);
+    color: var(--text-muted);
+    font-weight: 800;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 2px solid var(--surface-border);
+  }
+
+  .clinical-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--surface-border);
+    color: var(--text-main);
+  }
+
+  .clinical-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Grid Layouts */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .detail-box {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+  }
+
+  .detail-box label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  .detail-box span, .detail-box strong {
+    display: block;
+    font-size: 1.05rem;
+    color: var(--text-main);
+    margin-top: 4px;
+    font-weight: 700;
+  }
+
+  /* Tag Badges */
+  .tag-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 800;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+
+  .tag-green { background: #DCFCE7; color: #166534; }
+  .tag-amber { background: #FEF3C7; color: #92400E; }
+  .tag-blue { background: #DBEAFE; color: #1E40AF; }
+  .tag-purple { background: #F3E8FF; color: #6B21A8; }
+  .tag-red { background: #FEE2E2; color: #991B1B; }
+
+  /* Quick Action Buttons */
+  .btn-action-small {
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+  }
+
+  .btn-action-small:hover {
+    background: var(--primary-hover);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Top Header Area -->
+<div class="cm-header">
+  <div class="cm-title-area">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom: 6px;">
+      <span class="cm-badge-tag">🩺 Clinical Staff & Caregiver Suite</span>
+      <span class="cm-badge-tag">UK GDPR & NHS Standards</span>
+    </div>
+    <h2>Dementia Care Management System</h2>
+    <p>Comprehensive 22-module digital clinical care record for <strong>{{ patient.name }}</strong> (Age {{ patient.age }})</p>
+  </div>
+  <a href="/patient/lifestory" class="btn-action-small" style="background:#FFFFFF; color:var(--primary); font-size:0.95rem; padding:12px 20px;">
+    <span>📖</span>
+    <span>Open Life Story Book</span>
+  </a>
+</div>
+
+<!-- 6 Clinical Suite Tabs -->
+<div class="suite-tabs-scroll" role="tablist">
+  <button class="suite-tab-btn active" data-suite="profile">
+    <span>👤</span>
+    <span>1. Profile & Life Story</span>
+  </button>
+  <button class="suite-tab-btn" data-suite="clinical">
+    <span>💊</span>
+    <span>2. Meds & Health NEWS2</span>
+  </button>
+  <button class="suite-tab-btn" data-suite="behaviour">
+    <span>🧠</span>
+    <span>3. Mood, OT & Activities</span>
+  </button>
+  <button class="suite-tab-btn" data-suite="daily">
+    <span>🥗</span>
+    <span>4. Food, Fluid & Continence</span>
+  </button>
+  <button class="suite-tab-btn" data-suite="safety">
+    <span>🛡️</span>
+    <span>5. Safety, Falls & Moving</span>
+  </button>
+  <button class="suite-tab-btn" data-suite="governance">
+    <span>📋</span>
+    <span>6. Handover, Plans & Audit</span>
+  </button>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SUITE 1: PATIENT PROFILE & INDIVIDUAL LIFE STORY
+     ════════════════════════════════════════════════════════════════════════════ -->
+<div id="suiteProfile" class="suite-panel active">
+  
+  <!-- Module 1: Patient Profile -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 1</span>
+        <h3>Patient Profile & Identification</h3>
+      </div>
+      <span class="tag-pill tag-green">Active Care Plan</span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-box">
+        <label>Full Legal Name</label>
+        <strong>{{ patient.name }}</strong>
+      </div>
+      <div class="detail-box">
+        <label>Date of Birth / Room No.</label>
+        <span>14 March 1953 (Age 73) • Room 104-A</span>
+      </div>
+      <div class="detail-box">
+        <label>Diagnosis & Stage</label>
+        <span class="tag-pill tag-blue">Vascular & Alzheimer's Mixed Dementia (Stage 2)</span>
+      </div>
+      <div class="detail-box">
+        <label>Allergies & Medical Alerts</label>
+        <span class="tag-pill tag-red">⚠️ Penicillin (Severe Urticaria)</span>
+      </div>
+      <div class="detail-box">
+        <label>Next of Kin / Primary Contact</label>
+        <span>Rohit Hazarika (Son) • +91 98640 54321</span>
+      </div>
+      <div class="detail-box">
+        <label>Registered GP / Consultant</label>
+        <span>Dr. Sharma (GMCH Neurologist) • GMC Reg #4421</span>
+      </div>
+      <div class="detail-box">
+        <label>Communication Needs</label>
+        <span>Prefers Assamese & Simple Hindi; wears hearing aid in left ear</span>
+      </div>
+      <div class="detail-box">
+        <label>Safe-Zone Geofence</label>
+        <span class="tag-pill tag-green">🟢 Inside Home Perimeter (Guwahati)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPECIAL FEATURE: Individual Dementia Life Story Profile -->
+  <div class="module-card" style="border-left: 6px solid var(--secondary);">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge" style="background:var(--secondary-light); color:var(--secondary); border-color:var(--secondary);">Special Feature</span>
+        <h3>Individual Dementia Life Story Profile</h3>
+      </div>
+      <a href="/patient/lifestory" class="btn-action-small">View Illustrated Book →</a>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-box" style="grid-column: span 2;">
+        <label>Childhood & Family Roots</label>
+        <span>{{ life_story.childhood }}</span>
+      </div>
+      <div class="detail-box" style="grid-column: span 2;">
+        <label>Previous Occupation & Career</label>
+        <span>{{ life_story.occupation }}</span>
+      </div>
+      <div class="detail-box">
+        <label>Favorite Hobbies & Interests</label>
+        {% for h in life_story.hobbies %}
+          <span class="tag-pill tag-green">{{ h }}</span>
+        {% endfor %}
+      </div>
+      <div class="detail-box">
+        <label>Favorite Music & Singers</label>
+        {% for m in life_story.music %}
+          <span class="tag-pill tag-purple">{{ m }}</span>
+        {% endfor %}
+      </div>
+      <div class="detail-box" style="grid-column: span 2;">
+        <label>What Helps Him Feel Safe & Comforted</label>
+        {% for c in life_story.comfort_triggers %}
+          <div style="font-size:0.95rem; margin-top:4px;">✨ {{ c }}</div>
+        {% endfor %}
+      </div>
+      <div class="detail-box" style="grid-column: span 2;">
+        <label>Potential Distress Triggers (To Avoid)</label>
+        {% for d in life_story.distress_triggers %}
+          <div style="font-size:0.95rem; margin-top:4px; color:#B91C1C;">⚠️ {{ d }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SUITE 2: MEDICATION & CLINICAL HEALTH OBSERVATIONS
+     ════════════════════════════════════════════════════════════════════════════ -->
+<div id="suiteClinical" class="suite-panel">
+  
+  <!-- Module 2: Medication Management -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 2</span>
+        <h3>Medication Administration Records (MAR)</h3>
+      </div>
+      <button class="btn-action-small" onclick="alert('Medication Review Modal: All prescriptions verified by GMCH Pharmacy.')">+ Prescribe PRN / Review</button>
+    </div>
+
+    <table class="clinical-table">
+      <thead>
+        <tr>
+          <th>Medication & Dose</th>
+          <th>Time / Route</th>
+          <th>Purpose</th>
+          <th>Status Today</th>
+          <th>Refusal / PRN Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for med in medications %}
+        <tr>
+          <td><strong>{{ med.name }}</strong></td>
+          <td>{{ med.time }} • Oral</td>
+          <td>{{ med.purpose }}</td>
+          <td>
+            {% if med.taken %}
+              <span class="tag-pill tag-green">✅ Given & Taken</span>
+            {% else %}
+              <span class="tag-pill tag-amber">⏳ Pending</span>
+            {% endif %}
+          </td>
+          <td>No side effects observed. Well tolerated with water.</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td><strong>Paracetamol 500mg (PRN)</strong></td>
+          <td>As Needed • Oral</td>
+          <td>Joint Pain / Headache</td>
+          <td><span class="tag-pill tag-blue">Not Required Today</span></td>
+          <td>Last administered 3 days ago. Effective within 45 mins.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Module 6: Health Monitoring (NEWS2 Observations) -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 6</span>
+        <h3>Health Monitoring & NEWS2 Observations</h3>
+      </div>
+      <span class="tag-pill tag-green">NEWS2 Score: 0 (Normal)</span>
+    </div>
+
+    <table class="clinical-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>BP (mmHg)</th>
+          <th>Pulse (bpm)</th>
+          <th>Temp</th>
+          <th>Resp Rate</th>
+          <th>SpO2</th>
+          <th>Blood Glucose</th>
+          <th>Pain (0-10)</th>
+          <th>NEWS2 Clinical Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for obs in clinical_state.news2_observations %}
+        <tr>
+          <td><strong>{{ obs.time }}</strong></td>
+          <td>{{ obs.bp }}</td>
+          <td>{{ obs.pulse }}</td>
+          <td>{{ obs.temp }}</td>
+          <td>{{ obs.resp }}/min</td>
+          <td>{{ obs.spo2 }}</td>
+          <td>{{ obs.glucose }}</td>
+          <td>{{ obs.pain }}</td>
+          <td><span class="tag-pill tag-green">{{ obs.status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SUITE 3: MOOD, BEHAVIOUR & OCCUPATIONAL THERAPY
+     ════════════════════════════════════════════════════════════════════════════ -->
+<div id="suiteBehaviour" class="suite-panel">
+  
+  <!-- Module 3: Mood and Behaviour Monitoring -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 3</span>
+        <h3>Mood & Behaviour Monitoring</h3>
+      </div>
+      <span class="tag-pill tag-blue">Daily Assessment</span>
+    </div>
+
+    <table class="clinical-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Mood State</th>
+          <th>Behaviour Observations</th>
+          <th>Trigger (if any)</th>
+          <th>Calming Intervention & Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in clinical_state.behaviour_logs %}
+        <tr>
+          <td><strong>{{ b.time }}</strong></td>
+          <td><span class="tag-pill tag-green">{{ b.mood }}</span></td>
+          <td>{{ b.behaviour }}</td>
+          <td>{{ b.trigger }}</td>
+          <td>{{ b.intervention }} → <em>{{ b.outcome }}</em></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Module 4: Occupational Therapy and Meaningful Activities (A-I) -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 4</span>
+        <h3>Occupational Therapy & Meaningful Activities</h3>
+      </div>
+      <a href="/patient/games" class="btn-action-small">Open Brain Games Hub →</a>
+    </div>
+
+    <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:16px;">
+      Promoting cognitive maintenance, sensory comfort, daily living independence, and dignity through 9 activity domains:
+    </p>
+
+    <div class="detail-grid">
+      <div class="detail-box">
+        <label>A. Cognitive Stimulation</label>
+        <span>Memory match cards, symbol counting, jigsaw puzzles, word searches</span>
+      </div>
+      <div class="detail-box">
+        <label>B. Creative & Sensory</label>
+        <span>Orchid flower arranging, clay tactile modelling, calming hand massage</span>
+      </div>
+      <div class="detail-box">
+        <label>C. Music & Entertainment</label>
+        <span>Listening to Bhupen Hazarika folk songs, Bihu Dhol rhythmic tapping</span>
+      </div>
+      <div class="detail-box">
+        <label>D. Physical & Movement</label>
+        <span>Morning verandah stretching, chair yoga, supported garden walks</span>
+      </div>
+      <div class="detail-box">
+        <label>E. Daily Living & Independence</label>
+        <span>Folding fresh towels, sorting tea cutlery, choosing morning attire</span>
+      </div>
+      <div class="detail-box">
+        <label>F. Social & Group Sessions</label>
+        <span>Assam tea-time conversations, reminiscence sharing with family</span>
+      </div>
+      <div class="detail-box">
+        <label>G. Outdoor & Reminiscence</label>
+        <span>Bird watching, looking through old Kaziranga forestry photograph albums</span>
+      </div>
+      <div class="detail-box">
+        <label>H. Activity Preferences</label>
+        <span>Loves nature walks & folk music; dislikes crowded noisy TV rooms</span>
+      </div>
+    </div>
+
+    <!-- Section I: Activity Recording -->
+    <h4 style="font-family:var(--font-heading); margin-top:24px; margin-bottom:12px; font-size:1.15rem;">
+      I. Activity Log & Benefit Observations
+    </h4>
+    <table class="clinical-table">
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th>Domain</th>
+          <th>Duration</th>
+          <th>Participation</th>
+          <th>Mood (Before ➔ After)</th>
+          <th>Benefits Observed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for act in clinical_state.activity_logs %}
+        <tr>
+          <td><strong>{{ act.activity }}</strong></td>
+          <td><span class="tag-pill tag-blue">{{ act.category }}</span></td>
+          <td>{{ act.duration }}</td>
+          <td><span class="tag-pill tag-green">{{ act.participation }}</span></td>
+          <td>{{ act.mood_before }} ➔ <strong>{{ act.mood_after }}</strong></td>
+          <td>{{ act.benefit }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SUITE 4: NUTRITION, HYDRATION, PERSONAL CARE & CONTINENCE
+     ════════════════════════════════════════════════════════════════════════════ -->
+<div id="suiteDaily" class="suite-panel">
+  
+  <!-- Module 5: Food and Fluid Monitoring -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 5</span>
+        <h3>Food & Fluid Monitoring (SALT Compliant)</h3>
+      </div>
+      <span class="tag-pill tag-green">Daily Fluid Target: 1,600 ml (Achieved: 1,450 ml)</span>
+    </div>
+
+    <table class="clinical-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Meal</th>
+          <th>Items Consumed</th>
+          <th>% Eaten</th>
+          <th>Fluid (ml)</th>
+          <th>Swallowing / SALT</th>
+          <th>Staff Signature</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in clinical_state.food_fluid_logs %}
+        <tr>
+          <td><strong>{{ f.time }}</strong></td>
+          <td>{{ f.meal }}</td>
+          <td>{{ f.item }}</td>
+          <td><span class="tag-pill tag-green">{{ f.consumed }}</span></td>
+          <td><strong>{{ f.fluid_ml }} ml</strong></td>
+          <td>{{ f.swallowing }} (No coughing)</td>
+          <td><em>{{ f.logged_by }}</em></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modules 10, 11, 12 Grid -->
+  <div class="detail-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+    
+    <!-- Module 10: Personal Care and Hygiene -->
+    <div class="detail-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label>Module 10: Personal Care</label>
+        <span class="tag-pill tag-green">Completed</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.95rem;">
+        <div>🚿 Morning warm shower: Assisted (prompting only)</div>
+        <div>🪥 Oral hygiene: Completed twice daily</div>
+        <div>✂️ Grooming: Clean shaven, neat traditional Kurta</div>
+        <div>💅 Nail care: Inspected, clean and intact</div>
+      </div>
+    </div>
+
+    <!-- Module 11: Continence Monitoring -->
+    <div class="detail-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label>Module 11: Continence</label>
+        <span class="tag-pill tag-green">Continent</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.95rem;">
+        <div>🚽 Toileting schedule: Every 2-3 hours with gentle prompts</div>
+        <div>💧 Urine output: Adequate color (pale straw)</div>
+        <div>📋 Bowel record: Bristol Stool Type 4 (Normal) today</div>
+        <div>⚠️ Concerns: Nil constipation reported</div>
+      </div>
+    </div>
+
+    <!-- Module 12: Sleep and Night Monitoring -->
+    <div class="detail-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label>Module 12: Sleep & Night Care</label>
+        <span class="tag-pill tag-blue">7.5 Hours</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.95rem;">
+        <div>🛏️ Bedtime: 21:30 PM • Waking time: 06:45 AM</div>
+        <div>🌙 Night waking: 1 brief wake at 02:30 AM (assisted to toilet)</div>
+        <div>✨ Restlessness: Nil night wandering observed</div>
+        <div>🎵 Sleep quality: Restful with nightlamp on</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SUITE 5: SAFETY, FALLS & MOBILITY
+     ════════════════════════════════════════════════════════════════════════════ -->
+<div id="suiteSafety" class="suite-panel">
+  
+  <!-- Module 8: Moving and Handling -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 8</span>
+        <h3>Moving and Handling Assessment</h3>
+      </div>
+      <span class="tag-pill tag-green">1-Person Prompting</span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-box">
+        <label>Mobility Status</label>
+        <span>Independent indoor walking with quad-cane support</span>
+      </div>
+      <div class="detail-box">
+        <label>Transfers (Bed ↔ Chair)</label>
+        <span>Independent with verbal cueing. Good weight-bearing ability.</span>
+      </div>
+      <div class="detail-box">
+        <label>Assistance Required</label>
+        <span class="tag-pill tag-green">1-Person standby supervision for stairs & outdoors</span>
+      </div>
+      <div class="detail-box">
+        <label>Equipment Safety Checks</label>
+        <span>Walking frame & cane rubber stoppers inspected: Safe</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module 9: Falls Prevention and Incident Management -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 9</span>
+        <h3>Falls Prevention & Incident History</h3>
+      </div>
+      <span class="tag-pill tag-green">0 Falls in Last 90 Days</span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-box">
+        <label>Falls Risk Score</label>
+        <span class="tag-pill tag-amber">Moderate Risk (Age & Mild Gait Hesitancy)</span>
+      </div>
+      <div class="detail-box">
+        <label>Preventative Interventions</label>
+        <span>Non-slip footwear, motion sensor floor nightlights, clutter-free pathways</span>
+      </div>
+      <div class="detail-box">
+        <label>Post-Fall Protocol</label>
+        <span>Immediate GCS neurological check, 108 contact, family alert via SOS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modules 7, 13, 15, 16 Summary Cards -->
+  <div class="detail-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+    
+    <!-- Module 7: Safeguarding -->
+    <div class="detail-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label>Module 7: Safeguarding</label>
+        <span class="tag-pill tag-green">Zero Incidents</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.92rem;">
+        No unexplained marks, financial or verbal concerns. Weekly body map inspection completed with zero bruising.
+      </div>
+    </div>
+
+    <!-- Module 13: Skin Integrity -->
+    <div class="detail-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label>Module 13: Skin Integrity</label>
+        <span class="tag-pill tag-green">Waterlow: Low Risk</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.92rem;">
+        Skin clean, warm, intact. Sacrum and heels inspected daily. Memory foam pressure mattress in place.
+      </div>
+    </div>
+
+    <!-- Module 15: Infection Control -->
+    <div class="detail-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label>Module 15: Infection Control</label>
+        <span class="tag-pill tag-green">Safe</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.92rem;">
+        Nil signs of respiratory or UTI infection. Temperature 36.8°C normal. Hand hygiene protocols followed.
+      </div>
+    </div>
+
+    <!-- Module 16: Fire & Emergency Safety -->
+    <div class="detail-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <label>Module 16: Fire & PEEP Plan</label>
+        <span class="tag-pill tag-blue">Level 1 Evacuation</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.92rem;">
+        PEEP Plan: Ground floor bedroom with direct ramp exit to garden. Staff to guide using walking frame.
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SUITE 6: GOVERNANCE, SHIFT HANDOVER & AUDIT TRAIL
+     ════════════════════════════════════════════════════════════════════════════ -->
+<div id="suiteGovernance" class="suite-panel">
+  
+  <!-- Module 20: Daily Shift Handover -->
+  <div class="module-card">
+    <div class="module-header">
+      <div class="module-header-title">
+        <span class="module-num-badge">Module 20</span>
+        <h3>Daily Shift Handover Record</h3>
+      </div>
+      <button class="btn-action-small" onclick="alert('Shift Handover Confirmation recorded!')">Confirm Handover ✓</button>
+    </div>
+
+    {% for h in clinical_state.shift_handovers %}
+    <div style="background:var(--surface-alt); border:1.5px solid var(--surface-border); border-radius:var(--radius-lg); padding:18px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <strong style="font-family:var(--font-heading); font-size:1.15rem; color:var(--primary);">{{ h.shift }}</strong>
+        <span style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">Staff: {{ h.staff }}</span>
+      </div>
+      <div style="font-size:0.95rem; display:flex; flex-direction:column; gap:6px;">
+        <div>🩺 <strong>Vitals:</strong> {{ h.vitals_summary }}</div>
+        <div>💊 <strong>Medications:</strong> {{ h.meds_summary }}</div>
+        <div>🥗 <strong>Nutrition:</strong> {{ h.diet_summary }}</div>
+        <div>🛡️ <strong>Safety:</strong> {{ h.incidents }}</div>
+        <div style="background:#FEF3C7; color:#92400E; padding:8px 12px; border-radius:var(--radius-md); font-weight:700; margin-top:4px;">
+          📌 <strong>Handover Action for Next Shift:</strong> {{ h.next_shift_actions }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Modules 14, 17, 18, 19, 21, 22 Grid -->
+  <div class="detail-grid">
+    
+    <div class="detail-box">
+      <label>Module 14: Mental Capacity & Legal</label>
+      <span style="font-size:0.95rem;">Assessed for daily choices (clothing, meals). Lasting Power of Attorney (Health & Welfare) registered with son Rohit.</span>
+    </div>
+
+    <div class="detail-box">
+      <label>Module 17: Family Communication</label>
+      <span style="font-size:0.95rem;">Daughter Ananya visited at 16:30 PM. Brought favorite Assamese rice pitha. Updated on medication review.</span>
+    </div>
+
+    <div class="detail-box">
+      <label>Module 18: Professional Reviews</label>
+      <span style="font-size:0.95rem;">Next GMCH Neurology Review: 18 Nov 2026. Community OT visit scheduled for home bathroom grab bar check.</span>
+    </div>
+
+    <div class="detail-box">
+      <label>Module 19: Care Plans & Risk Reviews</label>
+      <span style="font-size:0.95rem;">Person-Centred Care Plan version 4.2 reviewed and signed off by lead nurse and family on 15 Oct 2026.</span>
+    </div>
+
+    <div class="detail-box">
+      <label>Module 21: Reports & Analytics</label>
+      <span style="font-size:0.95rem;">Weekly memory score average: 84/100. Fluid compliance: 91%. Calming intervention success rate: 96%.</span>
+    </div>
+
+    <div class="detail-box">
+      <label>Module 22: Security & UK GDPR Audit</label>
+      <span class="tag-pill tag-green">Audit Trail Active</span>
+      <span style="font-size:0.92rem; display:block; margin-top:4px;">All records time-stamped and encrypted. Role-based access enforced.</span>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // ── 6 Clinical Suite Tab Switching ─────────────────────────────────────────
+  document.querySelectorAll('.suite-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.suite-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.suite-panel').forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const suite = btn.dataset.suite;
+
+      if (suite === 'profile') document.getElementById('suiteProfile').classList.add('active');
+      else if (suite === 'clinical') document.getElementById('suiteClinical').classList.add('active');
+      else if (suite === 'behaviour') document.getElementById('suiteBehaviour').classList.add('active');
+      else if (suite === 'daily') document.getElementById('suiteDaily').classList.add('active');
+      else if (suite === 'safety') document.getElementById('suiteSafety').classList.add('active');
+      else if (suite === 'governance') document.getElementById('suiteGovernance').classList.add('active');
+
+      if (window.soundEngine) window.soundEngine.playClick();
+    });
+  });
+</script>
+{% endblock %}

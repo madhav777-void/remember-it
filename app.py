@@ -109,6 +109,60 @@ LANGUAGES = [
     {"code": "garo", "name": "Garo", "native": "A·chik", "flag": "🏔️", "greeting": "Salam! Remember It-ona rimchaksoa."}
 ]
 
+# ── SPECIAL FEATURE: Individual Dementia Life Story Profile ─────────────────
+DEFAULT_LIFE_STORY = {
+    "childhood": "Born and raised along the banks of the Brahmaputra River in Tezpur, Assam. Grew up in a joint family with four siblings.",
+    "occupation": "Senior Forestry Officer with Assam Forest Department (34 years of service). Worked extensively in Kaziranga National Park protecting rhinos and wildlife.",
+    "hobbies": ["Gardening indigenous orchid species", "Playing the Bihu Dhol and Flute", "Fishing in river streams", "Listening to Bhupen Hazarika folk songs"],
+    "music": ["Bhupen Hazarika Classics (Manuhe Manuhor Babe)", "Zubeen Garg Folk Melodies", "Borgeet devotional prayers", "Rabindra Sangeet"],
+    "life_events": [
+        {"year": 1953, "title": "Born in Tezpur, Assam"},
+        {"year": 1978, "title": "Married Sunita in Guwahati - 48 years of love and companionship"},
+        {"year": 1982, "title": "Joined Assam Forest Service at Kaziranga"},
+        {"year": 1985, "title": "Birth of son Rohit; daughter Ananya born in 1989"},
+        {"year": 2016, "title": "Retired as Divisional Forest Officer with state honors"}
+    ],
+    "favorite_foods": ["Traditional Assam Khar & Masor Tenga (sour fish curry)", "Fresh green tea with tulsi leaves", "Pitha sweets during Bihu", "Warm rice with mashed potatoes (Alu Pitika)"],
+    "comfort_triggers": [
+        "Playing soft bamboo flute or Bhupen Hazarika songs",
+        "Gentle hand massage with lavender or mustard oil",
+        "Holding family photo album of Kaziranga trips",
+        "Sitting on the garden verandah in morning sunlight with warm tea",
+        "Speaking in native Assamese with family"
+    ],
+    "distress_triggers": [
+        "Loud sudden noises, slamming doors or sirens",
+        "Rushing or multiple staff speaking at once",
+        "Dark corridors or unlit rooms after sunset (sundowning)",
+        "Feeling confined or unable to see an open window"
+    ],
+    "safety_preferences": "Always explain care steps slowly in Assamese before starting. Keep his spectacles and family photo frame within reach on the bedside table."
+}
+
+# ── 22 Clinical Modules State Store ──────────────────────────────────────────
+CLINICAL_MODULES_STATE = {
+    "food_fluid_logs": [
+        {"time": "08:30 AM", "meal": "Breakfast", "item": "Warm rice gruel, boiled egg, fresh papaya", "consumed": "85%", "fluid_ml": 250, "swallowing": "Normal", "logged_by": "Nurse Sunita"},
+        {"time": "01:15 PM", "meal": "Lunch", "item": "Masor Tenga fish stew, soft steamed rice, dal", "consumed": "90%", "fluid_ml": 300, "swallowing": "Normal", "logged_by": "Nurse Sunita"},
+        {"time": "05:00 PM", "meal": "Afternoon Tea", "item": "Assam green tea with soft Marie biscuit", "consumed": "100%", "fluid_ml": 200, "swallowing": "Normal", "logged_by": "Caregiver Rohit"}
+    ],
+    "news2_observations": [
+        {"time": "08:00 AM", "bp": "120/80", "pulse": 74, "temp": "36.8°C", "resp": 16, "spo2": "98%", "glucose": "108 mg/dL", "pain": "0/10", "news2_score": 0, "status": "Low Risk / Normal"},
+        {"time": "02:00 PM", "bp": "122/82", "pulse": 76, "temp": "36.9°C", "resp": 17, "spo2": "98%", "glucose": "124 mg/dL", "pain": "1/10", "news2_score": 0, "status": "Low Risk / Normal"}
+    ],
+    "behaviour_logs": [
+        {"time": "11:00 AM", "mood": "Happy & Engaged", "behaviour": "Enjoyed flower arranging activity in sensory garden", "trigger": "None", "intervention": "Offered positive encouragement", "outcome": "Calm and smiling"},
+        {"time": "06:15 PM", "mood": "Mild Sundowning Restlessness", "behaviour": "Pacing near room door asking about his forest office", "trigger": "Twilight dimming lights", "intervention": "Turned on warm lights, offered warm tea, played Bhupen Hazarika music", "outcome": "Settled down peacefully within 15 minutes"}
+    ],
+    "activity_logs": [
+        {"activity": "Cultural Memory Match Game", "category": "Cognitive Stimulation", "duration": "20 mins", "participation": "Prompted", "mood_before": "Quiet", "mood_after": "Delighted", "benefit": "Recalled Kaziranga rhino memories"},
+        {"activity": "Sensory Orchid Garden Walk", "category": "Creative & Outdoor", "duration": "25 mins", "participation": "Independent with supervision", "mood_before": "Neutral", "mood_after": "Very Happy", "benefit": "Physical movement and fresh air"}
+    ],
+    "shift_handovers": [
+        {"shift": "Morning Shift (07:00 - 15:00)", "staff": "Nurse Pranjal & Care Assistant Bhaswati", "vitals_summary": "Stable NEWS2=0", "meds_summary": "Morning Donepezil taken, Amlodipine taken", "diet_summary": "Fluid target 750ml met", "incidents": "Zero falls, zero safeguarding concerns", "next_shift_actions": "Ensure 07:30 PM Vitamin B-Complex given; watch for sunset restlessness around 18:00"}
+    ]
+}
+
 # ── In-Memory User Store (Pre-seeded Demo Accounts) ──────────────────────────
 USERS = {
     "9876543210": {
@@ -358,6 +412,39 @@ def caregiver_emergency():
         'caregiver_emergency.html',
         user=user,
         patient=patient
+    )
+
+@app.route('/caregiver/care-management', methods=['GET'])
+@login_required
+def caregiver_care_management():
+    """Comprehensive 22-Module Dementia Patient Care Management System."""
+    user = get_current_user()
+    linked_phone = user.get('linked_patient_phone', '9876543210')
+    patient = USERS.get(linked_phone) or {
+        "name": DEFAULT_VITALS["patient_name"],
+        "age": DEFAULT_VITALS["age"],
+        "condition": DEFAULT_VITALS["condition"],
+        "safe_zone": DEFAULT_VITALS["safe_zone"]
+    }
+    return render_template(
+        'caregiver_care_management.html',
+        user=user,
+        patient=patient,
+        medications=medications_data,
+        life_story=DEFAULT_LIFE_STORY,
+        clinical_state=CLINICAL_MODULES_STATE
+    )
+
+@app.route('/patient/lifestory', methods=['GET'])
+@app.route('/caregiver/lifestory', methods=['GET'])
+@login_required
+def patient_lifestory():
+    """Individual Dementia Life Story Profile Book."""
+    user = get_current_user()
+    return render_template(
+        'patient_lifestory.html',
+        user=user,
+        life_story=DEFAULT_LIFE_STORY
     )
 
 # ── API Routes (Preserved & Extended) ────────────────────────────────────────
