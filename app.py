@@ -297,9 +297,10 @@ def patient_medicines():
     )
 
 @app.route('/patient/game', methods=['GET'])
+@app.route('/patient/games', methods=['GET'])
 @login_required
 def patient_game():
-    """Dedicated 3D Physics Memory Match Brain Game page."""
+    """Dedicated Cognitive Brain Games Hub page."""
     user = get_current_user()
     return render_template(
         'patient_game.html',

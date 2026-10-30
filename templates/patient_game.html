@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}3D Brain Memory Game | Remember It{% endblock %}
+{% block title %}Brain Games Hub | Remember It NER Dementia Care{% endblock %}
 
 {% block extra_head %}
 <style>
+  /* ── Games Hub Navigation & Layout ─────────────────────────────────────── */
   .game-page-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
     gap: 16px;
   }
@@ -47,7 +48,72 @@
     background: var(--primary-light);
   }
 
-  /* Game Container Card */
+  /* ── 4-Game Hub Selection Grid ─────────────────────────────────────────── */
+  .games-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .game-tab-btn {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .game-tab-btn:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .game-tab-btn.active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    border-width: 2.5px;
+    box-shadow: 0 4px 14px var(--primary-glow);
+  }
+
+  .game-tab-icon {
+    font-size: 2.2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    border: 1.5px solid var(--surface-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .game-tab-btn.active .game-tab-icon {
+    background: #FFFFFF;
+    border-color: var(--primary);
+  }
+
+  .game-tab-info strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--text-main);
+  }
+
+  .game-tab-info span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  /* ── Game Box Container ─────────────────────────────────────────────────── */
   .game-box-card {
     background: var(--surface);
     border: 2px solid var(--surface-border);
@@ -55,6 +121,7 @@
     padding: 28px;
     box-shadow: var(--shadow-md);
     margin-bottom: 30px;
+    min-height: 420px;
   }
 
   .game-header-bar {
@@ -64,32 +131,26 @@
     margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 14px;
+    padding-bottom: 16px;
+    border-bottom: 1.5px solid var(--surface-border);
   }
 
   .game-instructions-box {
     font-size: 1.05rem;
     color: var(--text-muted);
     font-weight: 600;
-    margin-bottom: 20px;
-  }
-
-  .game-stats-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
   }
 
   .stat-badge {
     background: var(--surface-alt);
     border: 1.5px solid var(--surface-border);
-    padding: 10px 20px;
+    padding: 8px 18px;
     border-radius: var(--radius-full);
     font-family: var(--font-heading);
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 800;
     color: var(--primary);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
   }
@@ -97,16 +158,16 @@
   .btn-restart-game {
     background: var(--surface-alt);
     border: 2px solid var(--surface-border);
-    padding: 10px 20px;
+    padding: 9px 18px;
     border-radius: var(--radius-full);
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 800;
     color: var(--text-main);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     transition: all 0.2s;
   }
 
@@ -116,14 +177,14 @@
     background: var(--primary-light);
   }
 
-  /* ── 3D Physics Flip Cards Grid ────────────────────────────────────────── */
+  /* ── GAME 1: 3D Memory Flip Grid ───────────────────────────────────────── */
   .memory-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     perspective: 1200px;
-    max-width: 680px;
-    margin: 0 auto;
+    max-width: 660px;
+    margin: 20px auto 0;
   }
 
   @media (max-width: 640px) {
@@ -142,7 +203,6 @@
     transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: var(--shadow-sm);
     user-select: none;
-    -webkit-tap-highlight-color: transparent;
   }
 
   .memory-card:active {
@@ -172,7 +232,6 @@
     text-align: center;
   }
 
-  /* Card Front: High-contrast tactile pattern */
   .card-front {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
     border: 3px solid #FFFFFF;
@@ -185,7 +244,6 @@
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
   }
 
-  /* Card Back: Revealed image + title with smooth physics */
   .card-back {
     background: #FFFFFF;
     border: 3px solid var(--primary-light);
@@ -206,7 +264,207 @@
     line-height: 1.2;
   }
 
-  /* Celebratory Victory Banner */
+  /* ── GAME 2: Color Pattern (Simon Sequence) ────────────────────────────── */
+  .simon-container {
+    max-width: 440px;
+    margin: 20px auto;
+    text-align: center;
+  }
+
+  .simon-pads-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px auto;
+  }
+
+  .simon-pad {
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-xl);
+    border: 4px solid #FFFFFF;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.1s, filter 0.15s, opacity 0.15s;
+    opacity: 0.78;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .simon-pad:active, .simon-pad.active {
+    opacity: 1;
+    filter: brightness(1.4);
+    transform: scale(0.96);
+    box-shadow: 0 0 30px currentColor;
+  }
+
+  .pad-red { background: #EF4444; color: #EF4444; }
+  .pad-blue { background: #3B82F6; color: #3B82F6; }
+  .pad-green { background: #10B981; color: #10B981; }
+  .pad-yellow { background: #F59E0B; color: #F59E0B; }
+
+  .pad-label {
+    color: #FFFFFF;
+    font-size: 1.2rem;
+  }
+
+  /* ── GAME 3: Count the Symbols ─────────────────────────────────────────── */
+  .count-game-container {
+    max-width: 680px;
+    margin: 10px auto;
+    text-align: center;
+  }
+
+  .count-target-prompt {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--primary);
+    background: var(--primary-light);
+    border-radius: var(--radius-lg);
+    padding: 14px 20px;
+    margin-bottom: 20px;
+  }
+
+  .count-symbols-arena {
+    background: var(--surface-alt);
+    border: 2px dashed var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    min-height: 180px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    font-size: 3.2rem;
+    user-select: none;
+  }
+
+  .count-number-pad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .num-btn {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--text-main);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.15s;
+  }
+
+  .num-btn:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .num-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* ── GAME 4: Word & Picture Match ──────────────────────────────────────── */
+  .word-match-container {
+    max-width: 620px;
+    margin: 10px auto;
+    text-align: center;
+  }
+
+  .word-card-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--primary-light) 100%);
+    border: 2.5px solid var(--primary);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .word-display-en {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 0.04em;
+  }
+
+  .word-display-native {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-top: 4px;
+  }
+
+  .btn-listen-word {
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .picture-choices-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .pic-choice-card {
+    background: var(--surface);
+    border: 2.5px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    font-size: 4rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .pic-choice-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-md);
+  }
+
+  .pic-choice-card.correct-pick {
+    background: #DCFCE7;
+    border-color: #22C55E;
+    animation: bounce 0.4s ease;
+  }
+
+  .pic-choice-card.wrong-pick {
+    background: #FEE2E2;
+    border-color: #EF4444;
+  }
+
+  /* ── Victory & Feedback Banners ────────────────────────────────────────── */
   .victory-banner {
     display: none;
     background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
@@ -236,6 +494,14 @@
     font-weight: 600;
     margin-bottom: 16px;
   }
+
+  .game-section {
+    display: none;
+  }
+
+  .game-section.active {
+    display: block;
+  }
 </style>
 {% endblock %}
 
@@ -244,23 +510,55 @@
 <div class="game-page-header">
   <div class="game-page-title">
     <a href="/patient" class="btn-back" title="Go back to Home">← Back to Home</a>
-    <h2>🧩 Memory Match Brain Game</h2>
+    <h2>🧠 Cognitive Brain Games Hub</h2>
   </div>
-  <button id="btnRestartGame" class="btn-restart-game">
-    <span>🔄</span>
-    <span>Shuffle & Restart</span>
+</div>
+
+<!-- 4 Games Selector Hub -->
+<div class="games-selector-grid">
+  <button class="game-tab-btn active" data-game="memory">
+    <div class="game-tab-icon">🧩</div>
+    <div class="game-tab-info">
+      <strong>Memory Match</strong>
+      <span>3D Cultural Pairs</span>
+    </div>
+  </button>
+
+  <button class="game-tab-btn" data-game="simon">
+    <div class="game-tab-icon">🎨</div>
+    <div class="game-tab-info">
+      <strong>Color Pattern</strong>
+      <span>Follow the Sequence</span>
+    </div>
+  </button>
+
+  <button class="game-tab-btn" data-game="count">
+    <div class="game-tab-icon">🔢</div>
+    <div class="game-tab-info">
+      <strong>Count Symbols</strong>
+      <span>Visual Observation</span>
+    </div>
+  </button>
+
+  <button class="game-tab-btn" data-game="word">
+    <div class="game-tab-icon">🔤</div>
+    <div class="game-tab-info">
+      <strong>Word & Picture</strong>
+      <span>Language Recall</span>
+    </div>
   </button>
 </div>
 
-<!-- Game Board Card -->
-<div class="game-box-card">
-  
+<!-- ══════════════════════════════════════════════════════════════════════════
+     GAME 1: 3D CULTURAL MEMORY MATCH (Preserved)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="sectionMemory" class="game-box-card game-section active">
   <div class="game-header-bar">
     <div class="game-instructions-box">
       Tap two cards at a time to reveal matching pairs of iconic North East cultural treasures!
     </div>
     
-    <div class="game-stats-row">
+    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
       <div id="gameMoves" class="stat-badge">
         <span>🔄 Moves:</span>
         <strong id="movesVal">0</strong>
@@ -269,24 +567,150 @@
         <span>⭐ Matches:</span>
         <strong id="matchesVal">0 / 6</strong>
       </div>
+      <button id="btnRestartMemory" class="btn-restart-game">
+        <span>🔄 Shuffle</span>
+      </button>
     </div>
   </div>
 
-  <!-- 3D Physics Flip Cards Grid -->
-  <div id="memoryGrid" class="memory-grid" role="region" aria-label="Memory Card Grid">
-    <!-- Populated by JavaScript -->
-  </div>
+  <div id="memoryGrid" class="memory-grid" role="region" aria-label="Memory Card Grid"></div>
 
-  <!-- Victory Box -->
-  <div id="victoryBox" class="victory-banner">
+  <div id="victoryBoxMemory" class="victory-banner">
     <div style="font-size: 3.5rem; margin-bottom: 8px;">🎉</div>
     <h3>Wonderful Job, {{ user.name }}!</h3>
     <p>You matched all 6 North East cultural pairs. Your cognitive focus is sharp and active!</p>
-    <button class="btn-voice-speak" style="margin: 0 auto;" onclick="initMemoryGame()">
+    <button class="btn-restart-game" style="background: #047857; color:#fff;" onclick="initMemoryGame()">
       <span>🔄</span> Play Again
     </button>
   </div>
+</div>
 
+<!-- ══════════════════════════════════════════════════════════════════════════
+     GAME 2: COLOR PATTERN (SIMON SAYS)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="sectionSimon" class="game-box-card game-section">
+  <div class="game-header-bar">
+    <div class="game-instructions-box">
+      Watch the colored pads light up, listen to the tones, and tap them back in the exact order!
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+      <div class="stat-badge">
+        <span>Level:</span>
+        <strong id="simonLevel">1</strong>
+      </div>
+      <div class="stat-badge">
+        <span>Best:</span>
+        <strong id="simonBest">0</strong>
+      </div>
+      <button id="btnStartSimon" class="btn-restart-game">
+        <span>▶️ Start Game</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="simon-container">
+    <div id="simonStatusMsg" style="font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-bottom: 12px;">
+      Tap "Start Game" to begin round 1
+    </div>
+
+    <div class="simon-pads-grid">
+      <div class="simon-pad pad-red" data-color="0">
+        <span class="pad-label">🔴 Red</span>
+      </div>
+      <div class="simon-pad pad-blue" data-color="1">
+        <span class="pad-label">🔵 Blue</span>
+      </div>
+      <div class="simon-pad pad-green" data-color="2">
+        <span class="pad-label">🟢 Green</span>
+      </div>
+      <div class="simon-pad pad-yellow" data-color="3">
+        <span class="pad-label">🟡 Yellow</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     GAME 3: COUNT THE SYMBOLS
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="sectionCount" class="game-box-card game-section">
+  <div class="game-header-bar">
+    <div class="game-instructions-box">
+      Look closely at the arena below, count the target symbols, and tap the correct number!
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+      <div class="stat-badge">
+        <span>Score:</span>
+        <strong id="countScore">0 / 5</strong>
+      </div>
+      <button id="btnNextCount" class="btn-restart-game">
+        <span>🔄 New Round</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="count-game-container">
+    <div id="countPrompt" class="count-target-prompt">
+      How many 🦏 Rhinos can you spot?
+    </div>
+
+    <div id="countArena" class="count-symbols-arena">
+      <!-- Generated symbols -->
+    </div>
+
+    <p style="font-weight: 700; color: var(--text-muted); margin-bottom: 12px;">Tap your answer:</p>
+    <div class="count-number-pad">
+      <button class="num-btn" data-val="1">1</button>
+      <button class="num-btn" data-val="2">2</button>
+      <button class="num-btn" data-val="3">3</button>
+      <button class="num-btn" data-val="4">4</button>
+      <button class="num-btn" data-val="5">5</button>
+      <button class="num-btn" data-val="6">6</button>
+      <button class="num-btn" data-val="7">7</button>
+      <button class="num-btn" data-val="8">8</button>
+      <button class="num-btn" data-val="9">9</button>
+      <button class="num-btn" data-val="10">10</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     GAME 4: WORD & PICTURE MATCH
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="sectionWord" class="game-box-card game-section">
+  <div class="game-header-bar">
+    <div class="game-instructions-box">
+      Read or listen to the word in English & Regional language, then pick the matching picture!
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+      <div class="stat-badge">
+        <span>Question:</span>
+        <strong id="wordRound">1 / 10</strong>
+      </div>
+      <div class="stat-badge">
+        <span>Score:</span>
+        <strong id="wordScore">0</strong>
+      </div>
+      <button id="btnRestartWord" class="btn-restart-game">
+        <span>🔄 Restart</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="word-match-container">
+    <div class="word-card-banner">
+      <div id="wordDisplayEn" class="word-display-en">RHINO</div>
+      <div id="wordDisplayNative" class="word-display-native">গঁড় (Assamese)</div>
+      <button id="btnListenWord" class="btn-listen-word">
+        <span>🔊</span> Listen Aloud
+      </button>
+    </div>
+
+    <p style="font-weight: 700; color: var(--text-muted); margin-bottom: 14px;">Tap the correct picture:</p>
+    <div id="pictureChoices" class="picture-choices-grid">
+      <!-- 4 Picture choices -->
+    </div>
+  </div>
 </div>
 {% endblock %}
 
@@ -294,13 +718,35 @@
 <script>
   /**
    * ==========================================================================
-   * 3D Physics Memory Match Game Engine
-   * Exactly preserves 12 cards (6 pairs): 🦏 🍵 🦌 🌉 🌸 🥁
-   * Fisher-Yates shuffle
-   * Web Audio Fanfare on win + cognitive score dispatch
+   * Cognitive Brain Games Hub Engine (4 Complete Interactive Games)
    * ==========================================================================
    */
-  const items = [
+
+  // ── Hub Section Tab Switching ─────────────────────────────────────────────
+  document.querySelectorAll('.game-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active'));
+
+      btn.classList.add('active');
+      const game = btn.dataset.game;
+
+      if (game === 'memory') {
+        document.getElementById('sectionMemory').classList.add('active');
+      } else if (game === 'simon') {
+        document.getElementById('sectionSimon').classList.add('active');
+      } else if (game === 'count') {
+        document.getElementById('sectionCount').classList.add('active');
+      } else if (game === 'word') {
+        document.getElementById('sectionWord').classList.add('active');
+      }
+
+      if (window.soundEngine) window.soundEngine.playClick();
+    });
+  });
+
+  // ── GAME 1: 3D Memory Flip Match (Preserved) ──────────────────────────────
+  const memoryItems = [
     { id: 1, emoji: '🦏', title: 'One-Horned Rhino' },
     { id: 2, emoji: '🍵', title: 'Assam Green Tea' },
     { id: 3, emoji: '🦌', title: 'Sangai Deer' },
@@ -309,45 +755,35 @@
     { id: 6, emoji: '🥁', title: 'Bihu Dhol' }
   ];
 
-  let memoryCards = [];
+  let memoryDeck = [];
   let flippedCards = [];
   let matchedPairs = 0;
-  let moves = 0;
+  let movesCount = 0;
 
   function initMemoryGame() {
-    // Hide victory box
-    document.getElementById('victoryBox').classList.remove('show');
-
-    // Duplicate for pairs and assign unique IDs
-    const deck = [...items, ...items].map((item, idx) => ({
+    const deck = [...memoryItems, ...memoryItems].map((item, idx) => ({
       ...item,
       uniqueId: idx
     }));
 
-    // Fisher-Yates shuffle
     for (let i = deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [deck[i], deck[j]] = [deck[j], deck[i]];
     }
 
-    memoryCards = deck;
+    memoryDeck = deck;
     flippedCards = [];
     matchedPairs = 0;
-    moves = 0;
+    movesCount = 0;
 
-    renderMemoryGame();
-  }
+    document.getElementById('movesVal').textContent = '0';
+    document.getElementById('matchesVal').textContent = '0 / 6';
+    document.getElementById('victoryBoxMemory').classList.remove('show');
 
-  function renderMemoryGame() {
     const grid = document.getElementById('memoryGrid');
-    const movesVal = document.getElementById('movesVal');
-    const matchesVal = document.getElementById('matchesVal');
     if (!grid) return;
 
-    if (movesVal) movesVal.textContent = moves;
-    if (matchesVal) matchesVal.textContent = `${matchedPairs} / 6`;
-
-    grid.innerHTML = memoryCards.map((card, idx) => `
+    grid.innerHTML = memoryDeck.map((card, idx) => `
       <div class="memory-card" data-idx="${idx}">
         <div class="card-front"></div>
         <div class="card-back">
@@ -359,7 +795,7 @@
 
     grid.querySelectorAll('.memory-card').forEach(el => {
       el.addEventListener('click', () => {
-        const idx = parseInt(el.getAttribute('data-idx'), 10);
+        const idx = parseInt(el.dataset.idx, 10);
         flipMemoryCard(idx, el);
       });
     });
@@ -370,44 +806,38 @@
       return;
     }
 
-    sound.playClick();
+    if (window.soundEngine) window.soundEngine.playClick();
     el.classList.add('flipped');
-    flippedCards.push({ idx, card: memoryCards[idx], el });
+    flippedCards.push({ idx, card: memoryDeck[idx], el });
 
     if (flippedCards.length === 2) {
-      moves++;
-      const movesVal = document.getElementById('movesVal');
-      if (movesVal) movesVal.textContent = moves;
+      movesCount++;
+      document.getElementById('movesVal').textContent = movesCount;
 
       const [first, second] = flippedCards;
       if (first.card.id === second.card.id) {
-        // MATCH!
         setTimeout(() => {
           first.el.classList.add('matched');
           second.el.classList.add('matched');
           matchedPairs++;
-          const matchesVal = document.getElementById('matchesVal');
-          if (matchesVal) matchesVal.textContent = `${matchedPairs} / 6`;
+          document.getElementById('matchesVal').textContent = `${matchedPairs} / 6`;
           flippedCards = [];
-          sound.playChime();
+
+          if (window.soundEngine) window.soundEngine.playChime();
 
           if (matchedPairs === 6) {
             setTimeout(() => {
-              sound.playFanfare();
-              document.getElementById('victoryBox').classList.add('show');
-              showToast('🎉 Wonderful job! All memory pairs matched!');
-              speakText('Wonderful job, {{ user.name }}! You completed all the memory matches!');
-              // Record score to Python backend
+              if (window.soundEngine) window.soundEngine.playFanfare();
+              document.getElementById('victoryBoxMemory').classList.add('show');
               fetch('/api/scores', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ score: 95, moves: moves, day: 'Today' })
+                body: JSON.stringify({ score: 95, moves: movesCount, day: 'Today' })
               }).catch(() => {});
             }, 300);
           }
         }, 350);
       } else {
-        // No match - smooth physics flip back
         setTimeout(() => {
           first.el.classList.remove('flipped');
           second.el.classList.remove('flipped');
@@ -417,15 +847,243 @@
     }
   }
 
-  document.getElementById('btnRestartGame').addEventListener('click', () => {
-    sound.playClick();
+  document.getElementById('btnRestartMemory')?.addEventListener('click', () => {
     initMemoryGame();
-    showToast('Deck shuffled! Have fun!');
+    if (window.soundEngine) window.soundEngine.playClick();
   });
 
-  // Launch game on page load
-  document.addEventListener('DOMContentLoaded', () => {
+  // ── GAME 2: Color Pattern (Simon Says) ────────────────────────────────────
+  const simonPads = document.querySelectorAll('.simon-pad');
+  const simonFreqs = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+  let simonSequence = [];
+  let simonPlayerStep = 0;
+  let simonLevelVal = 1;
+  let simonActive = false;
+
+  function playTone(freq, dur = 0.3) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + dur);
+    } catch (e) {}
+  }
+
+  function flashPad(colorIdx) {
+    const pad = document.querySelector(`.simon-pad[data-color="${colorIdx}"]`);
+    if (!pad) return;
+    pad.classList.add('active');
+    playTone(simonFreqs[colorIdx], 0.35);
+    setTimeout(() => pad.classList.remove('active'), 350);
+  }
+
+  function startSimonRound() {
+    simonPlayerStep = 0;
+    simonSequence.push(Math.floor(Math.random() * 4));
+    document.getElementById('simonLevel').textContent = simonSequence.length;
+    document.getElementById('simonStatusMsg').textContent = `Watch carefully... (Round ${simonSequence.length})`;
+
+    simonActive = false;
+    let i = 0;
+    const interval = setInterval(() => {
+      flashPad(simonSequence[i]);
+      i++;
+      if (i >= simonSequence.length) {
+        clearInterval(interval);
+        setTimeout(() => {
+          simonActive = true;
+          document.getElementById('simonStatusMsg').textContent = 'Your turn! Repeat the pattern.';
+        }, 400);
+      }
+    }, 650);
+  }
+
+  simonPads.forEach(pad => {
+    pad.addEventListener('click', () => {
+      if (!simonActive) return;
+      const color = parseInt(pad.dataset.color, 10);
+      flashPad(color);
+
+      if (color === simonSequence[simonPlayerStep]) {
+        simonPlayerStep++;
+        if (simonPlayerStep >= simonSequence.length) {
+          simonActive = false;
+          if (window.soundEngine) window.soundEngine.playChime();
+          const best = Math.max(simonSequence.length, parseInt(localStorage.getItem('ner_simon_best') || '0', 10));
+          localStorage.setItem('ner_simon_best', best);
+          document.getElementById('simonBest').textContent = best;
+          document.getElementById('simonStatusMsg').textContent = '🎉 Correct! Getting ready for next round...';
+          setTimeout(startSimonRound, 1200);
+        }
+      } else {
+        simonActive = false;
+        playTone(150, 0.5);
+        document.getElementById('simonStatusMsg').textContent = '❌ Oops! Tap "Start Game" to try again.';
+      }
+    });
+  });
+
+  document.getElementById('btnStartSimon')?.addEventListener('click', () => {
+    simonSequence = [];
+    document.getElementById('simonBest').textContent = localStorage.getItem('ner_simon_best') || '0';
+    startSimonRound();
+  });
+
+  // ── GAME 3: Count the Symbols ─────────────────────────────────────────────
+  const countCatalog = [
+    { emoji: '🦏', name: 'Rhinos' },
+    { emoji: '🍵', name: 'Tea Cups' },
+    { emoji: '🦌', name: 'Sangai Deer' },
+    { emoji: '🌸', name: 'Anthurium Flowers' },
+    { emoji: '🥁', name: 'Bihu Dhols' }
+  ];
+
+  let currentTargetCount = 0;
+  let countRoundsWon = 0;
+
+  function initCountRound() {
+    const target = countCatalog[Math.floor(Math.random() * countCatalog.length)];
+    currentTargetCount = Math.floor(Math.random() * 8) + 2; // 2 to 9
+    document.getElementById('countPrompt').textContent = `How many ${target.emoji} ${target.name} can you spot?`;
+
+    const arena = document.getElementById('countArena');
+    arena.innerHTML = '';
+
+    // Add target items
+    const items = Array(currentTargetCount).fill(target.emoji);
+
+    // Shuffle and append
+    items.sort(() => Math.random() - 0.5);
+    items.forEach(emoji => {
+      const span = document.createElement('span');
+      span.textContent = emoji;
+      span.style.transform = `rotate(${Math.floor(Math.random() * 20 - 10)}deg)`;
+      arena.appendChild(span);
+    });
+  }
+
+  document.querySelectorAll('.num-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const picked = parseInt(btn.dataset.val, 10);
+      if (picked === currentTargetCount) {
+        if (window.soundEngine) window.soundEngine.playChime();
+        countRoundsWon++;
+        document.getElementById('countScore').textContent = `${countRoundsWon} / 5`;
+        btn.style.background = '#DCFCE7';
+        btn.style.borderColor = '#22C55E';
+        setTimeout(() => {
+          btn.style.background = '';
+          btn.style.borderColor = '';
+          if (countRoundsWon >= 5) {
+            if (window.soundEngine) window.soundEngine.playFanfare();
+            alert('🎉 Outstanding observation! You scored 5 out of 5 in Symbol Counting!');
+            countRoundsWon = 0;
+            document.getElementById('countScore').textContent = '0 / 5';
+          }
+          initCountRound();
+        }, 600);
+      } else {
+        playTone(150, 0.3);
+        btn.style.background = '#FEE2E2';
+        btn.style.borderColor = '#EF4444';
+        setTimeout(() => {
+          btn.style.background = '';
+          btn.style.borderColor = '';
+        }, 500);
+      }
+    });
+  });
+
+  document.getElementById('btnNextCount')?.addEventListener('click', initCountRound);
+
+  // ── GAME 4: Word & Picture Match ──────────────────────────────────────────
+  const wordQuestions = [
+    { en: 'RHINO', native: 'গঁড় (Assamese)', correct: '🦏', options: ['🦏', '🐘', '🦌', '🐻'] },
+    { en: 'GREEN TEA', native: 'চাহ (Assamese)', correct: '🍵', options: ['☕', '🍵', '🍶', '🫖'] },
+    { en: 'SANGAI DEER', native: 'হৰিণ (Manipuri)', correct: '🦌', options: ['🦌', '🐄', '🐐', '🐏'] },
+    { en: 'ANTHURIUM', native: 'ফুল (Mizo)', correct: '🌸', options: ['🌸', '🌻', '🌼', '🌺'] },
+    { en: 'BIHU DHOL', native: 'ঢোল (Assamese)', correct: '🥁', options: ['🥁', '🎸', '🎹', '🎺'] },
+    { en: 'MOUNTAIN', native: 'পাহাৰ (Bodo)', correct: '🏔️', options: ['🏔️', '🌊', '🏜️', '🌋'] },
+    { en: 'LIVING BRIDGE', native: 'Root Bridge (Khasi)', correct: '🌉', options: ['🌉', '🏠', '⛵', '🛤️'] },
+    { en: 'RAIN', native: 'বৰষুণ (Meghalaya)', correct: '🌧️', options: ['🌧️', '⛅', '🌈', '❄️'] },
+    { en: 'ELEPHANT', native: 'হাতী (Assamese)', correct: '🐘', options: ['🐘', '🦏', '🦒', '🐆'] },
+    { en: 'SUN', native: 'সূৰ্য (Hindi)', correct: '☀️', options: ['☀️', '🌙', '⭐', '🌤️'] }
+  ];
+
+  let currentWordIdx = 0;
+  let wordScoreVal = 0;
+
+  function loadWordQuestion(idx) {
+    if (idx >= wordQuestions.length) {
+      if (window.soundEngine) window.soundEngine.playFanfare();
+      alert(`🎉 Wonderful! You completed Word & Picture match with ${wordScoreVal} out of 10 points!`);
+      currentWordIdx = 0;
+      wordScoreVal = 0;
+    }
+
+    const q = wordQuestions[currentWordIdx];
+    document.getElementById('wordRound').textContent = `${currentWordIdx + 1} / 10`;
+    document.getElementById('wordScore').textContent = wordScoreVal;
+    document.getElementById('wordDisplayEn').textContent = q.en;
+    document.getElementById('wordDisplayNative').textContent = q.native;
+
+    const container = document.getElementById('pictureChoices');
+    container.innerHTML = '';
+
+    const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+    shuffled.forEach(emoji => {
+      const card = document.createElement('div');
+      card.className = 'pic-choice-card';
+      card.textContent = emoji;
+      card.addEventListener('click', () => {
+        if (emoji === q.correct) {
+          card.classList.add('correct-pick');
+          if (window.soundEngine) window.soundEngine.playChime();
+          wordScoreVal++;
+          document.getElementById('wordScore').textContent = wordScoreVal;
+          setTimeout(() => {
+            currentWordIdx++;
+            loadWordQuestion(currentWordIdx);
+          }, 600);
+        } else {
+          card.classList.add('wrong-pick');
+          playTone(150, 0.3);
+          setTimeout(() => card.classList.remove('wrong-pick'), 500);
+        }
+      });
+      container.appendChild(card);
+    });
+  }
+
+  document.getElementById('btnListenWord')?.addEventListener('click', () => {
+    const q = wordQuestions[currentWordIdx];
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(q.en);
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    }
+  });
+
+  document.getElementById('btnRestartWord')?.addEventListener('click', () => {
+    currentWordIdx = 0;
+    wordScoreVal = 0;
+    loadWordQuestion(0);
+  });
+
+  // ── Global Init on Load ───────────────────────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
     initMemoryGame();
+    initCountRound();
+    loadWordQuestion(0);
+    document.getElementById('simonBest').textContent = localStorage.getItem('ner_simon_best') || '0';
   });
 </script>
 {% endblock %}
