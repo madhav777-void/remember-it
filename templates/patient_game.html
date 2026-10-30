@@ -502,6 +502,360 @@
   .game-section.active {
     display: block;
   }
+
+  /* ── GAME 5: Sensory Drawing & Art Therapy Pad ─────────────────────────── */
+  .drawing-pad-layout {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-top: 14px;
+  }
+
+  @media (max-width: 920px) {
+    .drawing-pad-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Reference Card Box */
+  .reference-box-card {
+    background: #FFFFFF;
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ref-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ref-header h4 {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ref-preview-area {
+    background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+    border: 2px dashed #CBD5E1;
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ref-svg-container {
+    width: 130px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ref-svg-container svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+  }
+
+  .ref-title-badge {
+    margin-top: 10px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .ref-hint-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 4px;
+    line-height: 1.35;
+  }
+
+  .ref-picker-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .btn-ref-choice {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: 9px 10px;
+    cursor: pointer;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-body);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    text-align: left;
+  }
+
+  .btn-ref-choice:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  .btn-ref-choice.active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 800;
+    box-shadow: 0 2px 8px var(--primary-glow);
+  }
+
+  .btn-trace-toggle {
+    width: 100%;
+    background: #F1F5F9;
+    border: 2px dashed #94A3B8;
+    color: #334155;
+    padding: 11px 14px;
+    border-radius: var(--radius-md);
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+
+  .btn-trace-toggle:hover {
+    background: #E2E8F0;
+  }
+
+  .btn-trace-toggle.active {
+    background: #E0F2FE;
+    border-color: #0284C7;
+    color: #0369A1;
+    font-weight: 800;
+  }
+
+  /* Canvas Studio Card */
+  .canvas-studio-card {
+    background: #FFFFFF;
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Toolbar */
+  .art-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+  }
+
+  .palette-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .color-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2.5px solid #FFFFFF;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+
+  .color-chip:hover {
+    transform: scale(1.15);
+  }
+
+  .color-chip.active {
+    transform: scale(1.24);
+    box-shadow: 0 0 0 2.5px var(--primary);
+  }
+
+  .color-picker-input {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+  }
+
+  .brush-sizes {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-brush-size {
+    background: #FFFFFF;
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    height: 34px;
+    padding: 0 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-body);
+    transition: all 0.15s;
+  }
+
+  .btn-brush-size:hover {
+    border-color: var(--primary);
+  }
+
+  .btn-brush-size.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+  }
+
+  .brush-dot {
+    background: currentColor;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn-art-action {
+    background: #FFFFFF;
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-body);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+
+  .btn-art-action:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-art-action.active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-art-save {
+    background: #059669;
+    color: #FFFFFF;
+    border-color: #059669;
+  }
+
+  .btn-art-save:hover {
+    background: #047857;
+    color: #FFFFFF;
+    border-color: #047857;
+  }
+
+  /* Canvas Stage */
+  .canvas-stage-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 420px;
+    background: #FFFFFF;
+    border: 3px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+    touch-action: none; /* Essential for smooth touchpad and finger drawing */
+    user-select: none;
+  }
+
+  .canvas-stage-wrapper.tracing-active .trace-guide-watermark {
+    display: flex;
+  }
+
+  .trace-guide-watermark {
+    display: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.18;
+    z-index: 1;
+    padding: 30px;
+  }
+
+  .trace-guide-watermark svg {
+    max-width: 70%;
+    max-height: 70%;
+  }
+
+  #artCanvas {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 420px;
+    cursor: crosshair;
+    background: transparent;
+  }
+
+  .art-therapy-note {
+    background: #ECFDF5;
+    border: 1.5px solid #A7F3D0;
+    border-radius: var(--radius-lg);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #065F46;
+    font-weight: 600;
+  }
 </style>
 {% endblock %}
 
@@ -545,6 +899,14 @@
     <div class="game-tab-info">
       <strong>Word & Picture</strong>
       <span>Language Recall</span>
+    </div>
+  </button>
+
+  <button class="game-tab-btn" data-game="drawing">
+    <div class="game-tab-icon">🖌️</div>
+    <div class="game-tab-info">
+      <strong>Art & Drawing Pad</strong>
+      <span>Sensory Sketch & Trace</span>
     </div>
   </button>
 </div>
@@ -712,6 +1074,176 @@
     </div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     GAME 5: ART THERAPY & SENSORY DRAWING PAD (With Reference & Touchpad Support)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="sectionDrawing" class="game-box-card game-section">
+  <div class="game-header-bar">
+    <div class="game-instructions-box">
+      🎨 Pick a calming North East reference to copy or trace, or sketch freely with your mouse, touchpad, or finger!
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+      <div class="stat-badge">
+        <span>Art Subject:</span>
+        <strong id="activeArtSubject">🌺 Wild Orchid</strong>
+      </div>
+      <button id="btnFreshCanvas" class="btn-restart-game" style="background: var(--surface); color: var(--text-body); border: 1.5px solid var(--surface-border);">
+        <span>✨ New Page</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="drawing-pad-layout">
+    
+    <!-- LEFT COLUMN: Reference Guide & Tracing Options -->
+    <div class="reference-box-card">
+      <div class="ref-header">
+        <h4><span>🖼️</span> Reference Guide</h4>
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 3px 8px; border-radius: var(--radius-full);">Copy This</span>
+      </div>
+
+      <!-- Preview Image Area -->
+      <div class="ref-preview-area">
+        <div id="refSvgContainer" class="ref-svg-container">
+          <!-- Dynamic SVG injected here -->
+        </div>
+        <div id="refTitleBadge" class="ref-title-badge">Assam Orchid</div>
+        <div id="refHintText" class="ref-hint-text">1. Draw stem curve 2. Add round petals 3. Color in soft pink!</div>
+      </div>
+
+      <!-- Trace Over Option -->
+      <button id="btnTraceToggle" class="btn-trace-toggle" type="button" title="Overlay a faint watermark guide onto the canvas so you can easily trace it with mouse or touchpad">
+        <span>👻</span>
+        <span id="traceToggleLabel">Show Trace Guide on Canvas</span>
+      </button>
+
+      <!-- Reference Selector Buttons -->
+      <div>
+        <p style="font-size: 0.82rem; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em;">Pick Reference Idea:</p>
+        <div class="ref-picker-list">
+          <button type="button" class="btn-ref-choice active" data-ref="orchid">
+            <span>🌺</span>
+            <span>Orchid</span>
+          </button>
+          <button type="button" class="btn-ref-choice" data-ref="rhino">
+            <span>🦏</span>
+            <span>Rhino</span>
+          </button>
+          <button type="button" class="btn-ref-choice" data-ref="hills">
+            <span>☀️</span>
+            <span>Sun & Hills</span>
+          </button>
+          <button type="button" class="btn-ref-choice" data-ref="tea">
+            <span>🍵</span>
+            <span>Assam Tea</span>
+          </button>
+          <button type="button" class="btn-ref-choice" data-ref="cottage">
+            <span>🏡</span>
+            <span>Cottage</span>
+          </button>
+          <button type="button" class="btn-ref-choice" data-ref="butterfly">
+            <span>🦋</span>
+            <span>Butterfly</span>
+          </button>
+          <button type="button" class="btn-ref-choice" data-ref="blank" style="grid-column: span 2;">
+            <span>✨</span>
+            <span>Free Draw (Blank)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="art-therapy-note">
+        <span>💡</span>
+        <span>Art stimulates gentle hand-eye motor pathways and calms the nervous system.</span>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Drawing Studio & Canvas -->
+    <div class="canvas-studio-card">
+      
+      <!-- Toolbox Top Bar -->
+      <div class="art-toolbar">
+        
+        <!-- Palette Colors -->
+        <div class="palette-chips" role="group" aria-label="Drawing Colors">
+          <button type="button" class="color-chip active" data-color="#1E293B" style="background: #1E293B;" title="Charcoal Black"></button>
+          <button type="button" class="color-chip" data-color="#15803D" style="background: #15803D;" title="Tea Green"></button>
+          <button type="button" class="color-chip" data-color="#0284C7" style="background: #0284C7;" title="River Blue"></button>
+          <button type="button" class="color-chip" data-color="#DC2626" style="background: #DC2626;" title="Crimson Red"></button>
+          <button type="button" class="color-chip" data-color="#EA580C" style="background: #EA580C;" title="Marigold Orange"></button>
+          <button type="button" class="color-chip" data-color="#EAB308" style="background: #EAB308;" title="Sun Yellow"></button>
+          <button type="button" class="color-chip" data-color="#7C3AED" style="background: #7C3AED;" title="Orchid Violet"></button>
+          <button type="button" class="color-chip" data-color="#EC4899" style="background: #EC4899;" title="Lotus Pink"></button>
+          <button type="button" class="color-chip" data-color="#78350F" style="background: #78350F;" title="Earth Brown"></button>
+          <input type="color" id="artCustomColor" class="color-picker-input" value="#2E7D6E" title="Custom color picker">
+        </div>
+
+        <!-- Brush Sizes -->
+        <div class="brush-sizes" role="group" aria-label="Brush Sizes">
+          <button type="button" class="btn-brush-size" data-size="4" title="Fine Line">
+            <span class="brush-dot" style="width: 4px; height: 4px;"></span>
+            <span>Fine</span>
+          </button>
+          <button type="button" class="btn-brush-size active" data-size="8" title="Medium Stroke">
+            <span class="brush-dot" style="width: 8px; height: 8px;"></span>
+            <span>Med</span>
+          </button>
+          <button type="button" class="btn-brush-size" data-size="16" title="Thick Marker">
+            <span class="brush-dot" style="width: 14px; height: 14px;"></span>
+            <span>Thick</span>
+          </button>
+          <button type="button" class="btn-brush-size" data-size="28" title="Crayon / Jumbo">
+            <span class="brush-dot" style="width: 20px; height: 20px;"></span>
+            <span>Jumbo</span>
+          </button>
+        </div>
+
+        <!-- Mode & Action Buttons -->
+        <div class="toolbar-actions">
+          <button type="button" id="btnToolBrush" class="btn-art-action active" title="Brush drawing tool">
+            <span>🖌️</span>
+            <span>Brush</span>
+          </button>
+          <button type="button" id="btnToolEraser" class="btn-art-action" title="Eraser tool">
+            <span>🧼</span>
+            <span>Eraser</span>
+          </button>
+          <button type="button" id="btnArtUndo" class="btn-art-action" title="Undo last stroke">
+            <span>↩️</span>
+            <span>Undo</span>
+          </button>
+          <button type="button" id="btnArtClear" class="btn-art-action" title="Clear canvas">
+            <span>🗑️</span>
+            <span>Clear</span>
+          </button>
+          <button type="button" id="btnArtSave" class="btn-art-action btn-art-save" title="Save & Download your drawing as PNG">
+            <span>💾</span>
+            <span>Save My Art</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Canvas Stage with Ghost Trace Watermark -->
+      <div id="canvasStageWrapper" class="canvas-stage-wrapper">
+        <div id="traceGuideWatermark" class="trace-guide-watermark">
+          <!-- Ghost trace guide SVG injected here -->
+        </div>
+        <canvas id="artCanvas" width="700" height="440"></canvas>
+      </div>
+
+      <!-- Helper advice for Mouse & Touchpad -->
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+        <span>🖐️ <strong>Touchpad / Mouse Tip:</strong> Click & drag smoothly. If you make a mistake, simply tap <strong>Undo</strong> or <strong>Eraser</strong>!</span>
+        <span id="canvasStrokeCount" style="color: var(--primary); font-weight: 800;">Strokes: 0</span>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -739,6 +1271,9 @@
         document.getElementById('sectionCount').classList.add('active');
       } else if (game === 'word') {
         document.getElementById('sectionWord').classList.add('active');
+      } else if (game === 'drawing') {
+        document.getElementById('sectionDrawing').classList.add('active');
+        initDrawingPad();
       }
 
       if (window.soundEngine) window.soundEngine.playClick();
@@ -1078,12 +1613,408 @@
     loadWordQuestion(0);
   });
 
+  // ── GAME 5: Sensory Art & Drawing Pad Engine ──────────────────────────────
+  const ART_REFERENCES = {
+    orchid: {
+      name: '🌺 Assam Orchid (কপৌ ফুল)',
+      title: 'Assam Wild Orchid',
+      hint: '1. Draw gentle curved stem 2. Add soft pink petals 3. Dot the center yellow!',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 85 C50 60 40 45 35 25" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/>
+        <path d="M42 55 C25 50 15 60 20 70 C25 75 40 68 45 57" fill="#86EFAC" stroke="#16A34A" stroke-width="2"/>
+        <circle cx="50" cy="35" r="14" fill="#F472B6" stroke="#DB2777" stroke-width="3"/>
+        <circle cx="36" cy="24" r="12" fill="#F472B6" stroke="#DB2777" stroke-width="3"/>
+        <circle cx="64" cy="24" r="12" fill="#F472B6" stroke="#DB2777" stroke-width="3"/>
+        <circle cx="50" cy="15" r="11" fill="#F9A8D4" stroke="#DB2777" stroke-width="3"/>
+        <circle cx="50" cy="28" r="7" fill="#FDE047" stroke="#CA8A04" stroke-width="2"/>
+      </svg>`
+    },
+    rhino: {
+      name: '🦏 One-Horned Rhino (গঁড়)',
+      title: 'Kaziranga Rhino',
+      hint: '1. Draw curved back & tummy 2. Add head with iconic horn 3. Four sturdy legs!',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="48" cy="58" rx="30" ry="20" fill="#94A3B8" stroke="#475569" stroke-width="3"/>
+        <ellipse cx="76" cy="48" rx="14" ry="12" fill="#94A3B8" stroke="#475569" stroke-width="3"/>
+        <path d="M84 42 L94 30 L87 46 Z" fill="#E2E8F0" stroke="#475569" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="78" cy="44" r="2.5" fill="#1E293B"/>
+        <rect x="28" y="70" width="8" height="18" rx="4" fill="#64748B" stroke="#475569" stroke-width="2"/>
+        <rect x="58" y="70" width="8" height="18" rx="4" fill="#64748B" stroke="#475569" stroke-width="2"/>
+        <path d="M20 54 Q14 62 18 68" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>`
+    },
+    hills: {
+      name: '☀️ Sun & Assam Hills (সূৰ্য্য আৰু পাহাৰ)',
+      title: 'Morning Sun over Hills',
+      hint: '1. Draw round golden sun 2. Sketch rolling curved hills 3. Blue river below!',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="38" r="16" fill="#FBBF24" stroke="#D97706" stroke-width="3"/>
+        <line x1="50" y1="14" x2="50" y2="6" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+        <line x1="28" y1="22" x2="22" y2="16" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+        <line x1="72" y1="22" x2="78" y2="16" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+        <path d="M5 80 Q32 38 60 76 Q78 50 95 80 Z" fill="#86EFAC" stroke="#15803D" stroke-width="3"/>
+        <path d="M0 88 C30 82 70 92 100 86 L100 100 L0 100 Z" fill="#60A5FA"/>
+      </svg>`
+    },
+    tea: {
+      name: '🍵 Cup of Assam Tea (এক কাপ চাহ)',
+      title: 'Warm Assam Green Tea',
+      hint: '1. Sketch the wide saucer 2. Draw cup with handle 3. Add warm curly steam!',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="85" rx="36" ry="6" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+        <path d="M24 45 L28 75 C28 80 72 80 72 75 L76 45 Z" fill="#F8FAFC" stroke="#0F766E" stroke-width="3"/>
+        <path d="M72 50 C84 50 84 68 70 68" stroke="#0F766E" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="50" cy="45" rx="26" ry="7" fill="#92400E" stroke="#0F766E" stroke-width="2.5"/>
+        <path d="M42 35 Q40 22 46 15" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M54 35 Q56 20 50 12" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>`
+    },
+    cottage: {
+      name: '🏡 Peaceful Cottage (বাঁহৰ ঘৰ)',
+      title: 'Peaceful Village Cottage',
+      hint: '1. Draw triangle roof 2. Add square walls & front door 3. Add small window!',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,20 18,48 82,48" fill="#F97316" stroke="#C2410C" stroke-width="3"/>
+        <rect x="26" y="48" width="48" height="38" fill="#FEF3C7" stroke="#78350F" stroke-width="3"/>
+        <rect x="42" y="62" width="16" height="24" fill="#B45309" stroke="#78350F" stroke-width="2"/>
+        <circle cx="54" cy="74" r="1.5" fill="#FEF3C7"/>
+        <rect x="60" y="54" width="10" height="10" fill="#93C5FD" stroke="#1E40AF" stroke-width="2"/>
+        <line x1="65" y1="54" x2="65" y2="64" stroke="#1E40AF" stroke-width="1.5"/>
+        <line x1="60" y1="59" x2="70" y2="59" stroke="#1E40AF" stroke-width="1.5"/>
+        <line x1="10" y1="86" x2="90" y2="86" stroke="#16A34A" stroke-width="3" stroke-linecap="round"/>
+      </svg>`
+    },
+    butterfly: {
+      name: '🦋 Forest Butterfly (পখিলা)',
+      title: 'Colorful Butterfly',
+      hint: '1. Draw slender center body 2. Add two big round wings 3. Color with bright spots!',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M48 25 Q30 5 15 28 Q5 48 35 55 Q20 72 32 82 Q45 88 50 68" fill="#A78BFA" stroke="#6D28D9" stroke-width="2.5"/>
+        <path d="M52 25 Q70 5 85 28 Q95 48 65 55 Q80 72 68 82 Q55 88 50 68" fill="#A78BFA" stroke="#6D28D9" stroke-width="2.5"/>
+        <circle cx="28" cy="35" r="5" fill="#FDE047"/>
+        <circle cx="72" cy="35" r="5" fill="#FDE047"/>
+        <rect x="48" y="24" width="4" height="48" rx="2" fill="#312E81"/>
+        <circle cx="50" cy="22" r="4" fill="#312E81"/>
+        <path d="M48 20 Q40 10 36 12" stroke="#312E81" stroke-width="2" stroke-linecap="round"/>
+        <path d="M52 20 Q60 10 64 12" stroke="#312E81" stroke-width="2" stroke-linecap="round"/>
+      </svg>`
+    },
+    blank: {
+      name: '✨ Freehand Sketching',
+      title: 'Blank Mindful Canvas',
+      hint: 'Draw anything from your childhood, favorite food, flowers, or calm thoughts!',
+      svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="15" y="15" width="70" height="70" rx="10" fill="#F8FAFC" stroke="#6366F1" stroke-width="3" stroke-dasharray="6 6"/>
+        <path d="M50 32 L54 44 L67 44 L56 52 L60 64 L50 56 L40 64 L44 52 L33 44 L46 44 Z" fill="#FBBF24" stroke="#D97706" stroke-width="2"/>
+      </svg>`
+    }
+  };
+
+  let activeRefKey = 'orchid';
+  let isTraceEnabled = false;
+  let activeArtColor = '#1E293B';
+  let activeBrushSize = 8;
+  let activeToolMode = 'brush'; // 'brush' or 'eraser'
+  let isArtDrawing = false;
+  let lastArtX = 0;
+  let lastArtY = 0;
+  let artStrokeCount = 0;
+  const strokeHistory = [];
+  const MAX_HISTORY = 20;
+
+  let artCanvas = null;
+  let artCtx = null;
+  let drawingPadInitialized = false;
+
+  function initDrawingPad() {
+    if (!artCanvas) {
+      artCanvas = document.getElementById('artCanvas');
+      if (!artCanvas) return;
+      artCtx = artCanvas.getContext('2d', { willReadFrequently: true });
+    }
+
+    if (!drawingPadInitialized) {
+      drawingPadInitialized = true;
+      setupDrawingEvents();
+    }
+
+    resizeAndInitArtCanvas();
+    setArtReference(activeRefKey);
+  }
+
+  function resizeAndInitArtCanvas() {
+    if (!artCanvas || !artCtx) return;
+    const stage = document.getElementById('canvasStageWrapper');
+    if (!stage) return;
+
+    const rect = stage.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const targetWidth = Math.max(rect.width, 320);
+    const targetHeight = 440;
+
+    // Check if canvas already has content to preserve
+    let existingContent = null;
+    if (artCanvas.width > 0 && artCanvas.height > 0) {
+      existingContent = document.createElement('canvas');
+      existingContent.width = artCanvas.width;
+      existingContent.height = artCanvas.height;
+      existingContent.getContext('2d').drawImage(artCanvas, 0, 0);
+    }
+
+    artCanvas.width = Math.round(targetWidth * dpr);
+    artCanvas.height = Math.round(targetHeight * dpr);
+    artCanvas.style.width = targetWidth + 'px';
+    artCanvas.style.height = targetHeight + 'px';
+
+    artCtx.scale(dpr, dpr);
+    artCtx.lineCap = 'round';
+    artCtx.lineJoin = 'round';
+
+    if (existingContent) {
+      artCtx.drawImage(existingContent, 0, 0, targetWidth, targetHeight);
+    } else {
+      // Clean white background for crisp drawings
+      artCtx.fillStyle = '#FFFFFF';
+      artCtx.fillRect(0, 0, targetWidth, targetHeight);
+      saveArtSnapshot();
+    }
+  }
+
+  function saveArtSnapshot() {
+    if (!artCanvas || !artCtx) return;
+    try {
+      const snap = artCtx.getImageData(0, 0, artCanvas.width, artCanvas.height);
+      strokeHistory.push(snap);
+      if (strokeHistory.length > MAX_HISTORY) strokeHistory.shift();
+    } catch(e) {}
+  }
+
+  function restoreArtSnapshot() {
+    if (!artCtx || strokeHistory.length <= 1) return;
+    strokeHistory.pop(); // remove current
+    const prev = strokeHistory[strokeHistory.length - 1];
+    if (prev) {
+      artCtx.putImageData(prev, 0, 0);
+      if (artStrokeCount > 0) artStrokeCount--;
+      updateStrokeCounter();
+      if (window.soundEngine) window.soundEngine.playClick();
+    }
+  }
+
+  function clearArtCanvas() {
+    if (!artCanvas || !artCtx) return;
+    saveArtSnapshot();
+    const dpr = window.devicePixelRatio || 1;
+    const w = artCanvas.width / dpr;
+    const h = artCanvas.height / dpr;
+    artCtx.fillStyle = '#FFFFFF';
+    artCtx.fillRect(0, 0, w, h);
+    artStrokeCount = 0;
+    updateStrokeCounter();
+    if (window.soundEngine) window.soundEngine.playClick();
+  }
+
+  function getArtPointerCoords(e) {
+    const rect = artCanvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  function setupDrawingEvents() {
+    if (!artCanvas) return;
+
+    // Pointer Events: natively supports Mouse, Touchpad, and Touchscreen
+    artCanvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      try { artCanvas.setPointerCapture(e.pointerId); } catch(err) {}
+
+      saveArtSnapshot();
+      isArtDrawing = true;
+      const coords = getArtPointerCoords(e);
+      lastArtX = coords.x;
+      lastArtY = coords.y;
+
+      // Draw a small dot immediately in case of single tap/click
+      artCtx.beginPath();
+      artCtx.arc(lastArtX, lastArtY, (activeToolMode === 'eraser' ? activeBrushSize * 2 : activeBrushSize) / 2, 0, Math.PI * 2);
+      artCtx.fillStyle = activeToolMode === 'eraser' ? '#FFFFFF' : activeArtColor;
+      artCtx.fill();
+    });
+
+    artCanvas.addEventListener('pointermove', (e) => {
+      if (!isArtDrawing) return;
+      e.preventDefault();
+      const coords = getArtPointerCoords(e);
+
+      artCtx.beginPath();
+      artCtx.moveTo(lastArtX, lastArtY);
+      artCtx.lineTo(coords.x, coords.y);
+      artCtx.strokeStyle = activeToolMode === 'eraser' ? '#FFFFFF' : activeArtColor;
+      artCtx.lineWidth = activeToolMode === 'eraser' ? activeBrushSize * 2.5 : activeBrushSize;
+      artCtx.stroke();
+
+      lastArtX = coords.x;
+      lastArtY = coords.y;
+    });
+
+    const endStroke = (e) => {
+      if (!isArtDrawing) return;
+      isArtDrawing = false;
+      artStrokeCount++;
+      updateStrokeCounter();
+      try { artCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
+    };
+
+    artCanvas.addEventListener('pointerup', endStroke);
+    artCanvas.addEventListener('pointercancel', endStroke);
+    artCanvas.addEventListener('pointerleave', endStroke);
+
+    // Color Chips
+    document.querySelectorAll('.color-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeArtColor = chip.dataset.color;
+        setToolMode('brush');
+        if (window.soundEngine) window.soundEngine.playClick();
+      });
+    });
+
+    // Custom Color Input
+    const customColorInput = document.getElementById('artCustomColor');
+    if (customColorInput) {
+      customColorInput.addEventListener('input', (e) => {
+        activeArtColor = e.target.value;
+        document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('active'));
+        setToolMode('brush');
+      });
+    }
+
+    // Brush Sizes
+    document.querySelectorAll('.btn-brush-size').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-brush-size').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeBrushSize = parseInt(btn.dataset.size, 10);
+        if (window.soundEngine) window.soundEngine.playClick();
+      });
+    });
+
+    // Tool Mode Buttons
+    const btnBrush = document.getElementById('btnToolBrush');
+    const btnEraser = document.getElementById('btnToolEraser');
+    if (btnBrush && btnEraser) {
+      btnBrush.addEventListener('click', () => setToolMode('brush'));
+      btnEraser.addEventListener('click', () => setToolMode('eraser'));
+    }
+
+    // Undo & Clear
+    document.getElementById('btnArtUndo')?.addEventListener('click', restoreArtSnapshot);
+    document.getElementById('btnArtClear')?.addEventListener('click', clearArtCanvas);
+    document.getElementById('btnFreshCanvas')?.addEventListener('click', clearArtCanvas);
+
+    // Save & Download Artwork
+    document.getElementById('btnArtSave')?.addEventListener('click', () => {
+      if (!artCanvas) return;
+      if (window.soundEngine) window.soundEngine.playChime();
+
+      const link = document.createElement('a');
+      link.download = `Remember_It_Art_${Date.now()}.png`;
+      link.href = artCanvas.toDataURL('image/png');
+      link.click();
+
+      alert('🎨 Wonderful artwork! Your drawing has been saved to your downloads folder.');
+    });
+
+    // Reference Item Pickers
+    document.querySelectorAll('.btn-ref-choice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-ref-choice').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setArtReference(btn.dataset.ref);
+        if (window.soundEngine) window.soundEngine.playClick();
+      });
+    });
+
+    // Trace Guide Watermark Toggle
+    const btnTrace = document.getElementById('btnTraceToggle');
+    if (btnTrace) {
+      btnTrace.addEventListener('click', () => {
+        isTraceEnabled = !isTraceEnabled;
+        const stage = document.getElementById('canvasStageWrapper');
+        const label = document.getElementById('traceToggleLabel');
+        if (isTraceEnabled) {
+          btnTrace.classList.add('active');
+          stage?.classList.add('tracing-active');
+          if (label) label.textContent = 'Hide Trace Guide';
+        } else {
+          btnTrace.classList.remove('active');
+          stage?.classList.remove('tracing-active');
+          if (label) label.textContent = 'Show Trace Guide on Canvas';
+        }
+        if (window.soundEngine) window.soundEngine.playClick();
+      });
+    }
+
+    // Window Resize Handler
+    window.addEventListener('resize', () => {
+      if (document.getElementById('sectionDrawing')?.classList.contains('active')) {
+        resizeAndInitArtCanvas();
+      }
+    });
+  }
+
+  function setToolMode(mode) {
+    activeToolMode = mode;
+    const btnBrush = document.getElementById('btnToolBrush');
+    const btnEraser = document.getElementById('btnToolEraser');
+    if (mode === 'brush') {
+      btnBrush?.classList.add('active');
+      btnEraser?.classList.remove('active');
+      if (artCanvas) artCanvas.style.cursor = 'crosshair';
+    } else {
+      btnEraser?.classList.add('active');
+      btnBrush?.classList.remove('active');
+      if (artCanvas) artCanvas.style.cursor = 'cell';
+    }
+  }
+
+  function setArtReference(key) {
+    activeRefKey = key;
+    const ref = ART_REFERENCES[key] || ART_REFERENCES.orchid;
+    const previewContainer = document.getElementById('refSvgContainer');
+    const watermarkContainer = document.getElementById('traceGuideWatermark');
+    const titleBadge = document.getElementById('refTitleBadge');
+    const hintText = document.getElementById('refHintText');
+    const headerSubject = document.getElementById('activeArtSubject');
+
+    if (previewContainer) previewContainer.innerHTML = ref.svg;
+    if (watermarkContainer) watermarkContainer.innerHTML = ref.svg;
+    if (titleBadge) titleBadge.textContent = ref.title;
+    if (hintText) hintText.textContent = ref.hint;
+    if (headerSubject) headerSubject.textContent = ref.name;
+  }
+
+  function updateStrokeCounter() {
+    const el = document.getElementById('canvasStrokeCount');
+    if (el) el.textContent = `Strokes: ${artStrokeCount}`;
+  }
+
   // ── Global Init on Load ───────────────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', () => {
     initMemoryGame();
     initCountRound();
     loadWordQuestion(0);
     document.getElementById('simonBest').textContent = localStorage.getItem('ner_simon_best') || '0';
+
+    // Auto-open Drawing tab if requested via URL query string (?tab=drawing)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tab') === 'drawing') {
+      const drawBtn = document.querySelector('.game-tab-btn[data-game="drawing"]');
+      if (drawBtn) drawBtn.click();
+    }
   });
 </script>
 {% endblock %}

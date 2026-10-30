@@ -361,6 +361,12 @@ def patient_game():
         user=user
     )
 
+@app.route('/patient/drawing', methods=['GET'])
+@app.route('/patient/art', methods=['GET'])
+@login_required
+def patient_drawing():
+    return redirect(url_for('patient_game') + '?tab=drawing')
+
 @app.route('/patient/family', methods=['GET'])
 @login_required
 def patient_family():

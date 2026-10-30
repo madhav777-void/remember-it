@@ -469,9 +469,13 @@
             <span>💊</span>
             <span>Medicines</span>
           </a>
-          <a href="/patient/games" class="nav-link-item {% if '/patient/game' in request.path %}active{% endif %}">
+          <a href="/patient/games" class="nav-link-item {% if '/patient/game' in request.path and 'drawing' not in request.query_string.decode('utf-8') %}active{% endif %}">
             <span>🧩</span>
             <span>Brain Games</span>
+          </a>
+          <a href="/patient/drawing" class="nav-link-item {% if 'drawing' in request.query_string.decode('utf-8') or request.path == '/patient/drawing' %}active{% endif %}">
+            <span>🎨</span>
+            <span>Art Pad</span>
           </a>
           <a href="/patient/lifestory" class="nav-link-item {% if request.path == '/patient/lifestory' %}active{% endif %}">
             <span>📖</span>

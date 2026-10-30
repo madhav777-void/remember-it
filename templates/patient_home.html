@@ -199,7 +199,7 @@
   /* Quick Navigation Cards Grid */
   .action-cards-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 20px;
     margin-bottom: 28px;
   }
@@ -541,6 +541,22 @@
     </div>
     <div class="action-card-btn">
       <span>Open Family Album</span>
+      <span>→</span>
+    </div>
+  </a>
+
+  <!-- Card 4: Art & Drawing Pad -->
+  <a href="/patient/games?tab=drawing" class="action-card">
+    <div>
+      <div class="action-card-header">
+        <div class="action-card-icon" style="background: #FDF2F8; color: #DB2777;">🎨</div>
+        <span style="background: #FDF2F8; color: #DB2777; font-size: 0.82rem; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-full);">Art Therapy</span>
+      </div>
+      <h3>Sensory Drawing Pad</h3>
+      <p>Sketch rhinos, wild orchids, and tea hills with copy & trace guides using your touchpad or mouse.</p>
+    </div>
+    <div class="action-card-btn">
+      <span>Start Drawing</span>
       <span>→</span>
     </div>
   </a>
