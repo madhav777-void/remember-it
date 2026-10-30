@@ -1,0 +1,664 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In / Register | Remember It NER Dementia Care{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Auth Split Screen Layout */
+  .auth-wrapper {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+    min-height: calc(100vh - 180px);
+    margin: 10px 0;
+  }
+
+  @media (max-width: 860px) {
+    .auth-wrapper {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  /* Left Column: Brand & Cultural Flags */
+  .auth-hero-col {
+    background: linear-gradient(145deg, #1D5A4E 0%, #2E7D6E 60%, #3D9987 100%);
+    border-radius: var(--radius-xl);
+    padding: 40px 36px;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .auth-hero-col::after {
+    content: '🌱';
+    position: absolute;
+    bottom: -30px;
+    right: -20px;
+    font-size: 14rem;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .auth-brand-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .auth-brand-logo {
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .auth-brand-header h1 {
+    font-family: var(--font-heading);
+    font-size: 2.1rem;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #FFFFFF;
+  }
+
+  .auth-hero-desc {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #E2F1ED;
+    margin-bottom: 30px;
+    font-weight: 500;
+  }
+
+  .auth-languages-panel {
+    background: rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .auth-languages-title {
+    font-size: 0.92rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 800;
+    color: #A3E4D7;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .auth-lang-pills {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .auth-lang-badge {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--radius-full);
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FFFFFF;
+  }
+
+  .auth-features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .auth-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.96rem;
+    font-weight: 600;
+    color: #E6F5F2;
+  }
+
+  .auth-feature-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  /* Right Column: Form Box */
+  .auth-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 36px 32px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Auth Tabs */
+  .auth-tab-buttons {
+    display: flex;
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-full);
+    padding: 4px;
+    margin-bottom: 24px;
+    gap: 4px;
+  }
+
+  .auth-tab-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 16px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .auth-tab-btn.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px var(--primary-glow);
+  }
+
+  /* Quick Demo Login Bar */
+  .demo-accounts-bar {
+    background: #FFF7ED;
+    border: 1.5px solid #FED7AA;
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 24px;
+  }
+
+  .demo-accounts-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #9A3412;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .demo-btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn-demo-quick {
+    flex: 1;
+    min-width: 140px;
+    background: #FFFFFF;
+    border: 1.5px solid #FDBA74;
+    color: #9A3412;
+    padding: 8px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-demo-quick:hover {
+    background: #EA580C;
+    border-color: #EA580C;
+    color: #FFFFFF;
+  }
+
+  /* Forms */
+  .auth-form {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .auth-form.active {
+    display: flex;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-label {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--text-main);
+    background: var(--surface-alt);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 4px var(--primary-glow);
+  }
+
+  /* Role Selection Radio Group */
+  .role-picker {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .role-option-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 14px 10px;
+    background: var(--surface-alt);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .role-option-label input[type="radio"] {
+    display: none;
+  }
+
+  .role-option-label.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 800;
+  }
+
+  .role-icon {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+  }
+
+  .btn-submit-auth {
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 15px 24px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--primary-glow);
+    transition: all 0.2s ease;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-submit-auth:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px var(--primary-glow);
+  }
+
+  .helper-text {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  
+  <!-- Left Side: Cultural & Brand Showcase -->
+  <div class="auth-hero-col">
+    <div>
+      <div class="auth-brand-header">
+        <div class="auth-brand-logo">🌱</div>
+        <div>
+          <h1>Remember It</h1>
+          <p style="font-size: 0.95rem; opacity: 0.9; font-weight: 700;">NER Dementia Care Companion</p>
+        </div>
+      </div>
+
+      <p class="auth-hero-desc">
+        A loving, accessible, culturally-tailored care platform dedicated to elderly elders with dementia, mild cognitive impairment, and their loving family caregivers in North East India.
+      </p>
+
+      <!-- 8 Regional Tongues -->
+      <div class="auth-languages-panel">
+        <div class="auth-languages-title">
+          <span>🌸</span>
+          <span>8 Regional North East Languages Supported</span>
+        </div>
+        <div class="auth-lang-pills">
+          <div class="auth-lang-badge"><span>🦏</span> অসমীয়া (Assamese)</div>
+          <div class="auth-lang-badge"><span>🦌</span> মৈতৈলোন্ (Manipuri)</div>
+          <div class="auth-lang-badge"><span>🌧️</span> Khasi (Meghalaya)</div>
+          <div class="auth-lang-badge"><span>🌸</span> Mizo ṭawng (Mizoram)</div>
+          <div class="auth-lang-badge"><span>🌾</span> बड़ो (Bodoland)</div>
+          <div class="auth-lang-badge"><span>🏔️</span> A·chik (Garo Hills)</div>
+          <div class="auth-lang-badge"><span>🇮🇳</span> हिन्दी (Hindi)</div>
+          <div class="auth-lang-badge"><span>🇬🇧</span> English</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="auth-features-list">
+      <div class="auth-feature-item">
+        <div class="auth-feature-icon">🧩</div>
+        <span>3D Physics Memory Match Game with cultural North East heritage</span>
+      </div>
+      <div class="auth-feature-item">
+        <div class="auth-feature-icon">💊</div>
+        <span>Simple, high-contrast daily medication checklist & adherence alerts</span>
+      </div>
+      <div class="auth-feature-item">
+        <div class="auth-feature-icon">📸</div>
+        <span>Loved ones photo reminiscence album with soothing voice helper</span>
+      </div>
+      <div class="auth-feature-item">
+        <div class="auth-feature-icon">🚨</div>
+        <span>One-touch Emergency SOS connected directly to family & ambulance</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side: Sign In / Register Card -->
+  <div class="auth-card">
+    
+    <!-- Tab Controls -->
+    <div class="auth-tab-buttons" role="tablist">
+      <button id="tabBtnLogin" class="auth-tab-btn active" role="tab" aria-selected="true" type="button">
+        Sign In
+      </button>
+      <button id="tabBtnRegister" class="auth-tab-btn" role="tab" aria-selected="false" type="button">
+        Create Account
+      </button>
+    </div>
+
+    <!-- Quick Demo Accounts -->
+    <div class="demo-accounts-bar">
+      <div class="demo-accounts-title">
+        <span>⚡</span>
+        <span>Instant Demo Login (One-click)</span>
+      </div>
+      <div class="demo-btn-row">
+        <button type="button" class="btn-demo-quick" id="btnDemoPatient">
+          <span>🧓</span> Patient Demo
+        </button>
+        <button type="button" class="btn-demo-quick" id="btnDemoCaregiver">
+          <span>🩺</span> Caregiver Demo
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 1: Login Form -->
+    <form id="formLogin" class="auth-form active" action="/auth/login" method="POST">
+      <div class="form-group">
+        <label for="loginPhone" class="form-label">Phone Number</label>
+        <input 
+          type="tel" 
+          id="loginPhone" 
+          name="phone" 
+          class="form-input" 
+          placeholder="e.g. 9876543210" 
+          required 
+          autocomplete="tel"
+        >
+        <span class="helper-text">Enter your 10-digit mobile number</span>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="loginPassword" 
+          name="password" 
+          class="form-input" 
+          placeholder="••••••••" 
+          required 
+          autocomplete="current-password"
+        >
+      </div>
+
+      <button type="submit" class="btn-submit-auth">
+        <span>Sign In to Remember It</span>
+        <span>→</span>
+      </button>
+    </form>
+
+    <!-- Tab 2: Register Form -->
+    <form id="formRegister" class="auth-form" action="/auth/register" method="POST">
+      
+      <!-- Role Picker -->
+      <div class="form-group">
+        <label class="form-label">I am registering as:</label>
+        <div class="role-picker">
+          <label class="role-option-label selected" id="roleLabelPatient">
+            <input type="radio" name="role" value="patient" checked>
+            <span class="role-icon">🧓</span>
+            <span>Patient / Elder</span>
+          </label>
+          <label class="role-option-label" id="roleLabelCaregiver">
+            <input type="radio" name="role" value="caregiver">
+            <span class="role-icon">🩺</span>
+            <span>Caregiver</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="regName" class="form-label">Full Name</label>
+        <input 
+          type="text" 
+          id="regName" 
+          name="name" 
+          class="form-input" 
+          placeholder="e.g. Bimal Hazarika" 
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="regPhone" class="form-label">Phone Number</label>
+        <input 
+          type="tel" 
+          id="regPhone" 
+          name="phone" 
+          class="form-input" 
+          placeholder="e.g. 9876543210" 
+          required 
+          autocomplete="tel"
+        >
+      </div>
+
+      <!-- Patient Specific: Age -->
+      <div class="form-group" id="patientFields">
+        <label for="regAge" class="form-label">Age (Years)</label>
+        <input 
+          type="number" 
+          id="regAge" 
+          name="age" 
+          class="form-input" 
+          placeholder="e.g. 73" 
+          min="40" 
+          max="120"
+        >
+      </div>
+
+      <!-- Caregiver Specific: Relation & Linked Patient -->
+      <div id="caregiverFields" style="display: none; display: flex; flex-direction: column; gap: 16px;">
+        <div class="form-group">
+          <label for="regRelation" class="form-label">Relationship to Patient</label>
+          <input 
+            type="text" 
+            id="regRelation" 
+            name="relation" 
+            class="form-input" 
+            placeholder="e.g. Son, Daughter, Spouse, Nurse"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="regLinkedPhone" class="form-label">Connected Patient's Phone Number</label>
+          <input 
+            type="tel" 
+            id="regLinkedPhone" 
+            name="linked_patient_phone" 
+            class="form-input" 
+            placeholder="e.g. 9876543210 (Demo Patient)"
+          >
+          <span class="helper-text">Enter the patient's phone to link your accounts together</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="regPassword" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="regPassword" 
+          name="password" 
+          class="form-input" 
+          placeholder="Create a password" 
+          required 
+          autocomplete="new-password"
+        >
+      </div>
+
+      <button type="submit" class="btn-submit-auth">
+        <span>Create Account & Continue</span>
+        <span>→</span>
+      </button>
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Tab Switching
+  const tabLogin = document.getElementById('tabBtnLogin');
+  const tabRegister = document.getElementById('tabBtnRegister');
+  const formLogin = document.getElementById('formLogin');
+  const formRegister = document.getElementById('formRegister');
+
+  function setTab(tab) {
+    if (tab === 'register') {
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      formRegister.classList.add('active');
+      formLogin.classList.remove('active');
+    } else {
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      formLogin.classList.add('active');
+      formRegister.classList.remove('active');
+    }
+  }
+
+  tabLogin.addEventListener('click', () => setTab('login'));
+  tabRegister.addEventListener('click', () => setTab('register'));
+
+  // Role Switcher in Registration
+  const roleRadios = document.querySelectorAll('input[name="role"]');
+  const rolePatientLabel = document.getElementById('roleLabelPatient');
+  const roleCaregiverLabel = document.getElementById('roleLabelCaregiver');
+  const patientFields = document.getElementById('patientFields');
+  const caregiverFields = document.getElementById('caregiverFields');
+
+  roleRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (radio.value === 'caregiver') {
+        roleCaregiverLabel.classList.add('selected');
+        rolePatientLabel.classList.remove('selected');
+        caregiverFields.style.display = 'flex';
+        patientFields.style.display = 'none';
+      } else {
+        rolePatientLabel.classList.add('selected');
+        roleCaregiverLabel.classList.remove('selected');
+        patientFields.style.display = 'flex';
+        caregiverFields.style.display = 'none';
+      }
+    });
+  });
+
+  // Demo buttons autofill & submit
+  document.getElementById('btnDemoPatient').addEventListener('click', () => {
+    setTab('login');
+    document.getElementById('loginPhone').value = '9876543210';
+    document.getElementById('loginPassword').value = 'demo123';
+    showToast('Demo Patient credentials loaded. Signing in...');
+    sound.playClick();
+    setTimeout(() => {
+      formLogin.submit();
+    }, 400);
+  });
+
+  document.getElementById('btnDemoCaregiver').addEventListener('click', () => {
+    setTab('login');
+    document.getElementById('loginPhone').value = '1234567890';
+    document.getElementById('loginPassword').value = 'demo123';
+    showToast('Demo Caregiver credentials loaded. Signing in...');
+    sound.playClick();
+    setTimeout(() => {
+      formLogin.submit();
+    }, 400);
+  });
+
+  // Check URL query param for tab
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('tab') === 'register') {
+    setTab('register');
+  }
+</script>
+{% endblock %}

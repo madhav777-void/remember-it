@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>{% block title %}Remember It | NER Dementia Care Companion{% endblock %}</title>
+  
+  <meta name="description" content="Culturally-inclusive dementia care companion for North East India. Features 8 regional languages, voice assistance, medication tracking, cognitive brain stimulation games, and emergency SOS.">
+  <meta name="theme-color" content="#2E7D6E">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/static/styles.css">
+
+  <style>
+    /* ==========================================================================
+       Critical Inline CSS for Fast, Reliable Vercel & Offline Rendering
+       ========================================================================== */
+    :root {
+      --primary: #2E7D6E;
+      --primary-hover: #246558;
+      --primary-light: #E8F5F2;
+      --primary-glow: rgba(46, 125, 110, 0.2);
+
+      --secondary: #E87C3E;
+      --secondary-light: #FFF3EB;
+
+      --accent-blue: #1565C0;
+      --accent-blue-light: #E3F2FD;
+
+      --accent-green: #2E7D32;
+      --accent-green-light: #E8F5E9;
+
+      --sos: #D32F2F;
+      --sos-hover: #B71C1C;
+      --sos-light: #FFEBEE;
+      --sos-pulse: rgba(211, 47, 47, 0.4);
+
+      --bg: #F4F7F6;
+      --surface: #FFFFFF;
+      --surface-alt: #F8FAF9;
+      --surface-border: #D8E2DF;
+
+      --text-main: #122521;
+      --text-body: #2B423D;
+      --text-muted: #5E7A74;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 2px 8px rgba(18, 37, 33, 0.05);
+      --shadow-md: 0 6px 18px rgba(18, 37, 33, 0.08);
+      --shadow-lg: 0 12px 32px rgba(18, 37, 33, 0.12);
+
+      --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text-body);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      background-color: var(--surface);
+      border-bottom: 2px solid var(--surface-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: 1px solid var(--surface-border);
+    }
+
+    .brand-text h1 {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text-body);
+      background: var(--surface-alt);
+      border: 1.5px solid var(--surface-border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-link-item:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    .nav-link-item.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+
+    .nav-user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      border: 1.5px solid #B2DFDB;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-nav-action {
+      background: var(--surface-alt);
+      border: 1.5px solid var(--surface-border);
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-nav-action:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-logout {
+      background: #FFF1F2;
+      border-color: #FECDD3;
+      color: #BE123C;
+    }
+
+    .btn-logout:hover {
+      background: #FEE2E2;
+      border-color: #F87171;
+      color: #991B1B;
+    }
+
+    /* Flash Messages */
+    .flash-container {
+      max-width: 1040px;
+      margin: 16px auto 0;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .flash-alert {
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      border: 1.5px solid transparent;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .flash-success {
+      background: #ECFDF5;
+      color: #065F46;
+      border-color: #A7F3D0;
+    }
+
+    .flash-error, .flash-danger {
+      background: #FEF2F2;
+      color: #991B1B;
+      border-color: #FECACA;
+    }
+
+    .flash-warning {
+      background: #FFFBEB;
+      color: #92400E;
+      border-color: #FDE68A;
+    }
+
+    .flash-info {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-color: #BFDBFE;
+    }
+
+    .flash-close {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.7;
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      max-width: 1040px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+      flex: 1;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--surface);
+      border-top: 1.5px solid var(--surface-border);
+      padding: 20px;
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: auto;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #122521;
+      color: #FFFFFF;
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      font-size: 0.98rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 2000;
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast-container.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
+    }
+
+    /* Language Selection Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 37, 33, 0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      max-width: 540px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--surface-border);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h3 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .btn-close-modal {
+      background: var(--surface-alt);
+      border: 1px solid var(--surface-border);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .btn-close-modal:hover {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .lang-grid-modal {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 520px) {
+      .lang-grid-modal {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lang-card-item {
+      background: var(--surface-alt);
+      border: 1.5px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s;
+      width: 100%;
+    }
+
+    .lang-card-item:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .lang-card-item.selected {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .lang-card-item.selected strong,
+    .lang-card-item.selected span {
+      color: #FFFFFF !important;
+    }
+
+    .lang-card-flag {
+      font-size: 1.8rem;
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Top Navigation (Visible when logged in or customized) -->
+  {% if session.get('user_phone') %}
+  <header class="top-nav" role="banner">
+    <div class="nav-container">
+      
+      <!-- Brand Logo -->
+      <a href="{{ '/caregiver' if session.get('user_role') == 'caregiver' else '/patient' }}" class="brand-wrapper" aria-label="Remember It Home">
+        <div class="brand-icon-box" aria-hidden="true">🌱</div>
+        <div class="brand-text">
+          <h1>Remember It</h1>
+          <span class="brand-subtitle">NER Dementia Care</span>
+        </div>
+      </a>
+
+      <!-- Page Links based on role -->
+      <nav class="nav-links" aria-label="Main Navigation">
+        {% if session.get('user_role') == 'patient' %}
+          <a href="/patient" class="nav-link-item {% if request.path == '/patient' %}active{% endif %}">
+            <span>🏠</span>
+            <span>Home</span>
+          </a>
+          <a href="/patient/medicines" class="nav-link-item {% if request.path == '/patient/medicines' %}active{% endif %}">
+            <span>💊</span>
+            <span>Medicines</span>
+          </a>
+          <a href="/patient/game" class="nav-link-item {% if request.path == '/patient/game' %}active{% endif %}">
+            <span>🧩</span>
+            <span>Brain Game</span>
+          </a>
+          <a href="/patient/family" class="nav-link-item {% if request.path == '/patient/family' %}active{% endif %}">
+            <span>📸</span>
+            <span>Loved Ones</span>
+          </a>
+        {% else %}
+          <a href="/caregiver" class="nav-link-item {% if request.path == '/caregiver' %}active{% endif %}">
+            <span>📊</span>
+            <span>Dashboard</span>
+          </a>
+          <a href="/patient/medicines" class="nav-link-item {% if request.path == '/patient/medicines' %}active{% endif %}">
+            <span>💊</span>
+            <span>Prescriptions</span>
+          </a>
+          <a href="/patient/game" class="nav-link-item {% if request.path == '/patient/game' %}active{% endif %}">
+            <span>🧩</span>
+            <span>Memory Game</span>
+          </a>
+          <a href="/caregiver/emergency" class="nav-link-item {% if request.path == '/caregiver/emergency' %}active{% endif %}">
+            <span>🚨</span>
+            <span>Emergency Contacts</span>
+          </a>
+        {% endif %}
+      </nav>
+
+      <!-- User Info & Utility Actions -->
+      <div class="nav-actions">
+        <div class="nav-user-badge" title="Logged in user">
+          <span>{{ '🧓' if session.get('user_role') == 'patient' else '🩺' }}</span>
+          <span>{{ session.get('user_name', 'User') }}</span>
+          <span style="opacity: 0.7; font-weight: 600;">({{ session.get('user_role', '').capitalize() }})</span>
+        </div>
+
+        <button id="btnOpenLang" class="btn-nav-action" aria-label="Select Language">
+          <span id="navLangFlag">🇮🇳</span>
+          <span id="navLangName">English</span>
+          <small>▼</small>
+        </button>
+
+        <button id="btnSoundToggle" class="btn-nav-action" title="Sound Mute/Unmute">
+          🔊
+        </button>
+
+        <a href="/auth/logout" class="btn-nav-action btn-logout" title="Sign out of account">
+          <span>🚪</span>
+          <span>Logout</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+  {% endif %}
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-alert flash-{{ category }}" role="alert">
+          <span>{{ message }}</span>
+          <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Dismiss">&times;</button>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content -->
+  <main class="main-wrapper">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <p>🌱 Remember It — Culturally-Inclusive North East India Dementia Care Companion • Assam • Manipur • Meghalaya • Mizoram • Bodoland • Nagaland</p>
+  </footer>
+
+  <!-- Language Switcher Modal -->
+  <div id="modalLanguage" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Select Regional Language</h3>
+        <button id="btnCloseLang" class="btn-close-modal" aria-label="Close modal">&times;</button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+        Choose your native North East language for voice companion and friendly guidance:
+      </p>
+      <div class="lang-grid-modal" id="langOptionsContainer">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="toast-container" aria-live="polite"></div>
+
+  <!-- Common Client Script: Web Audio, Voice, Toasts, Languages -->
+  <script>
+    // ── Web Audio Engine ────────────────────────────────────────────────────
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = localStorage.getItem('remember_sound_muted') === 'true';
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      toggleMute() {
+        this.muted = !this.muted;
+        localStorage.setItem('remember_sound_muted', this.muted);
+        return this.muted;
+      }
+
+      playClick() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(840, this.ctx.currentTime + 0.05);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.06);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.06);
+        } catch (e) {}
+      }
+
+      playChime() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+          notes.forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.09);
+            gain.gain.setValueAtTime(0.18, this.ctx.currentTime + i * 0.09);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.09 + 0.35);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(this.ctx.currentTime + i * 0.09);
+            osc.stop(this.ctx.currentTime + i * 0.09 + 0.35);
+          });
+        } catch (e) {}
+      }
+
+      playFanfare() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const notes = [523.25, 659.25, 783.99, 1046.5];
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.12);
+            gain.gain.setValueAtTime(0.24, this.ctx.currentTime + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.12 + 0.55);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(this.ctx.currentTime + idx * 0.12);
+            osc.stop(this.ctx.currentTime + idx * 0.12 + 0.55);
+          });
+        } catch (e) {}
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    // ── Toast System ────────────────────────────────────────────────────────
+    function showToast(message, duration = 3500) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, duration);
+    }
+
+    // ── Speech Synthesis Helper ─────────────────────────────────────────────
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Speech synthesis is not supported on this browser.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9; // Gently slower for elderly clarity
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // ── Language Setup ──────────────────────────────────────────────────────
+    const REGIONAL_LANGUAGES = [
+      { code: "en", name: "English", native: "English", flag: "🇬🇧", greeting: "Good day! Welcome to Remember It." },
+      { code: "as", name: "Assamese", native: "অসমীয়া", flag: "🦏", greeting: "নমস্কাৰ! আপোনাক স্বাগতম জনাইছো।" },
+      { code: "hi", name: "Hindi", native: "हिन्दी", flag: "🇮🇳", greeting: "नमस्ते! रिमेम्बर इट में आपका स्वागत है।" },
+      { code: "mni", name: "Manipuri", native: "মৈতৈলোন্", flag: "🦌", greeting: "খুরুমজরি! অদোমবু তরাম্না ওকচরি।" },
+      { code: "kha", name: "Khasi", native: "Khasi", flag: "🌧️", greeting: "Khublei shibun! Wan bah sha Remember It." },
+      { code: "lus", name: "Mizo", native: "Mizo ṭawng", flag: "🌸", greeting: "Chibai! Dam takin lo awm rawh le." },
+      { code: "bod", name: "Bodo", native: "बड़ो", flag: "🌾", greeting: "गोजोनथों! नोंथांखौ बरायबाय।" },
+      { code: "garo", name: "Garo", native: "A·chik", flag: "🏔️", greeting: "Salam! Remember It-ona rimchaksoa." }
+    ];
+
+    let currentLang = localStorage.getItem('remember_lang') || 'en';
+
+    function initLanguageModal() {
+      const modal = document.getElementById('modalLanguage');
+      const btnOpen = document.getElementById('btnOpenLang');
+      const btnClose = document.getElementById('btnCloseLang');
+      const container = document.getElementById('langOptionsContainer');
+      const navFlag = document.getElementById('navLangFlag');
+      const navName = document.getElementById('navLangName');
+
+      function updateNavLabel() {
+        const found = REGIONAL_LANGUAGES.find(l => l.code === currentLang) || REGIONAL_LANGUAGES[0];
+        if (navFlag) navFlag.textContent = found.flag;
+        if (navName) navName.textContent = found.name;
+      }
+      updateNavLabel();
+
+      if (container) {
+        container.innerHTML = REGIONAL_LANGUAGES.map(lang => `
+          <button class="lang-card-item ${lang.code === currentLang ? 'selected' : ''}" data-code="${lang.code}">
+            <span class="lang-card-flag">${lang.flag}</span>
+            <div>
+              <strong style="display: block; font-size: 0.95rem; color: var(--text-main);">${lang.name}</strong>
+              <span style="font-size: 0.82rem; color: var(--text-muted);">${lang.native}</span>
+            </div>
+          </button>
+        `).join('');
+
+        container.querySelectorAll('.lang-card-item').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const code = btn.getAttribute('data-code');
+            currentLang = code;
+            localStorage.setItem('remember_lang', code);
+            updateNavLabel();
+            modal.classList.remove('active');
+            const found = REGIONAL_LANGUAGES.find(l => l.code === code);
+            showToast(`Language set to ${found.name} (${found.native})`);
+            sound.playChime();
+            if (found.greeting) {
+              speakText(found.greeting);
+            }
+          });
+        });
+      }
+
+      if (btnOpen) {
+        btnOpen.addEventListener('click', () => {
+          sound.playClick();
+          modal.classList.add('active');
+        });
+      }
+
+      if (btnClose) {
+        btnClose.addEventListener('click', () => {
+          modal.classList.remove('active');
+        });
+      }
+
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) modal.classList.remove('active');
+        });
+      }
+    }
+
+    // Sound toggle button listener
+    const soundBtn = document.getElementById('btnSoundToggle');
+    if (soundBtn) {
+      if (sound.muted) soundBtn.textContent = '🔇';
+      soundBtn.addEventListener('click', () => {
+        const isMuted = sound.toggleMute();
+        soundBtn.textContent = isMuted ? '🔇' : '🔊';
+        showToast(isMuted ? 'Sound muted' : 'Sound turned on');
+        if (!isMuted) sound.playClick();
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initLanguageModal();
+    });
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

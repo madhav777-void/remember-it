@@ -1,0 +1,726 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Remember It - NER Dementia Care{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Patient Hero Header */
+  .hero-card {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F7F5 100%);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 28px 32px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .hero-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .clock-display {
+    font-family: var(--font-heading);
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .date-display {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  .weather-pill {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    padding: 12px 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .greeting-bar {
+    background: var(--primary-light);
+    border-left: 6px solid var(--primary);
+    border-radius: var(--radius-md);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .greeting-text h2 {
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .greeting-text p {
+    font-size: 1.15rem;
+    color: var(--text-body);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  .btn-voice-speak {
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 14px 24px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px var(--primary-glow);
+    transition: transform 0.15s, background-color 0.2s;
+  }
+
+  .btn-voice-speak:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  /* 🌸 UNIQUE FEATURE: Daily Mood Check Card */
+  .mood-check-card {
+    background: #FFFFFF;
+    border: 2px solid #B2DFDB;
+    border-radius: var(--radius-xl);
+    padding: 24px 28px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mood-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .mood-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mood-card-title h3 {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .current-mood-badge {
+    background: #E8F5E9;
+    color: #2E7D32;
+    border: 1.5px solid #A5D6A7;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.92rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mood-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  @media (max-width: 680px) {
+    .mood-buttons-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .btn-mood-option {
+    background: var(--surface-alt);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .btn-mood-option:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: translateY(-2px);
+  }
+
+  .btn-mood-option.active {
+    border-color: var(--primary);
+    background: #E0F2F1;
+    box-shadow: 0 4px 12px rgba(46, 125, 110, 0.15);
+  }
+
+  .btn-mood-option .mood-emoji {
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+
+  .btn-mood-option .mood-text {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  /* Quick Navigation Cards Grid */
+  .action-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 768px) {
+    .action-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .action-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .action-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .action-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .action-card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+  }
+
+  .action-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-top: 6px;
+  }
+
+  .action-card p {
+    font-size: 0.96rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .action-card-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 0.98rem;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+  }
+
+  /* Mini Medicine Checklist on Home */
+  .mini-meds-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 28px;
+  }
+
+  .mini-meds-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .mini-meds-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .med-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+    gap: 14px;
+    transition: all 0.2s;
+  }
+
+  .med-item-row.taken {
+    background: #F0FDF4;
+    border-color: #86EFAC;
+  }
+
+  .med-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .med-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: #FFFFFF;
+    border: 1.5px solid var(--surface-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+  }
+
+  .btn-check-med {
+    border: none;
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-check-med.pending {
+    background: var(--secondary-light);
+    color: var(--secondary);
+    border: 1.5px solid #FDBA74;
+  }
+
+  .btn-check-med.pending:hover {
+    background: var(--secondary);
+    color: #FFFFFF;
+  }
+
+  .btn-check-med.taken {
+    background: #DCFCE7;
+    color: #15803D;
+    border: 1.5px solid #86EFAC;
+  }
+
+  /* Emergency SOS Big Banner */
+  .sos-banner {
+    background: linear-gradient(135deg, var(--sos) 0%, var(--sos-hover) 100%);
+    border-radius: var(--radius-xl);
+    padding: 22px 28px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 8px 24px var(--sos-pulse);
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+
+  .sos-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px var(--sos-pulse);
+  }
+
+  .sos-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .sos-banner-icon {
+    font-size: 2.8rem;
+  }
+
+  .sos-banner-text h4 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+  }
+
+  .sos-banner-text p {
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0.95;
+  }
+
+  .sos-call-pill {
+    background: #FFFFFF;
+    color: var(--sos);
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    font-weight: 900;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Greeting & Clock Hero -->
+<div class="hero-card">
+  <div class="hero-top-row">
+    <div>
+      <div id="patientClock" class="clock-display">12:30 PM</div>
+      <div id="patientDate" class="date-display">Friday, 30 October 2026</div>
+    </div>
+    <div class="weather-pill">
+      <span style="font-size: 2.2rem;">🌤️</span>
+      <div>
+        <div style="font-weight: 800; font-size: 1.35rem; color: var(--text-main);">28°C</div>
+        <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">Guwahati, Assam</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="greeting-bar">
+    <div class="greeting-text">
+      <h2>Good Day, {{ user.name }} 🙏</h2>
+      <p id="greetingSubtitle">You are safe, comfortable, and surrounded by loved ones at home.</p>
+    </div>
+    <button id="btnListenGreeting" class="btn-voice-speak" aria-label="Tap to listen to greeting aloud">
+      <span>🔊</span>
+      <span>Tap to Listen</span>
+    </button>
+  </div>
+</div>
+
+<!-- 🌸 UNIQUE FEATURE: Daily Mood Check -->
+<div class="mood-check-card">
+  <div class="mood-card-header">
+    <div class="mood-card-title">
+      <span style="font-size: 1.8rem;">🌸</span>
+      <div>
+        <h3>Daily Mood Check</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">How are you feeling right now?</p>
+      </div>
+    </div>
+    <div id="moodBadgeContainer" class="current-mood-badge">
+      <span>{{ user.last_mood.emoji if user.last_mood else '😊' }}</span>
+      <span id="moodBadgeText">{{ user.last_mood.label if user.last_mood else 'Happy & Calm' }}</span>
+    </div>
+  </div>
+
+  <div class="mood-buttons-grid">
+    <button class="btn-mood-option" data-mood="Happy & Calm" data-emoji="😊" data-message="Wonderful! So glad you are feeling peaceful and cheerful today. May your day be blessed! 🌸">
+      <span class="mood-emoji">😊</span>
+      <span class="mood-text">Happy & Calm</span>
+    </button>
+    <button class="btn-mood-option" data-mood="Peaceful & Okay" data-emoji="😐" data-message="Everything is calm and okay. Take your time, relax, and remember your family loves you very much. 🍵">
+      <span class="mood-emoji">😐</span>
+      <span class="mood-text">Peaceful & Okay</span>
+    </button>
+    <button class="btn-mood-option" data-mood="Feeling Low" data-emoji="😢" data-message="It is okay to feel a little low. You are safe at home and your family is always here for you. We are right by your side. 💛">
+      <span class="mood-emoji">😢</span>
+      <span class="mood-text">Feeling Low</span>
+    </button>
+    <button class="btn-mood-option" data-mood="Anxious / Worried" data-emoji="😰" data-message="Take a deep breath in and out. You are safe. There is nothing to worry about. Rohit and Sunita are with you. 🌿">
+      <span class="mood-emoji">😰</span>
+      <span class="mood-text">Anxious</span>
+    </button>
+  </div>
+</div>
+
+<!-- Primary Quick Cards Grid -->
+<div class="action-cards-grid">
+  
+  <!-- Card 1: Medicines -->
+  <a href="/patient/medicines" class="action-card">
+    <div>
+      <div class="action-card-header">
+        <div class="action-card-icon" style="background: #E8F5E9; color: #2E7D32;">💊</div>
+        <span style="background: #E8F5E9; color: #2E7D32; font-size: 0.82rem; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-full);">Daily Care</span>
+      </div>
+      <h3>Daily Medicines</h3>
+      <p>Check off your prescribed morning and afternoon doses with ease.</p>
+    </div>
+    <div class="action-card-btn">
+      <span>Open Checklist</span>
+      <span>→</span>
+    </div>
+  </a>
+
+  <!-- Card 2: 3D Memory Game -->
+  <a href="/patient/game" class="action-card">
+    <div>
+      <div class="action-card-header">
+        <div class="action-card-icon" style="background: #E0F2FE; color: #0284C7;">🧩</div>
+        <span style="background: #E0F2FE; color: #0284C7; font-size: 0.82rem; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-full);">3D Physics</span>
+      </div>
+      <h3>Memory Match</h3>
+      <p>Stimulate brain memory matching rhinos, Assam tea, and cultural symbols.</p>
+    </div>
+    <div class="action-card-btn">
+      <span>Play Brain Game</span>
+      <span>→</span>
+    </div>
+  </a>
+
+  <!-- Card 3: Family Album -->
+  <a href="/patient/family" class="action-card">
+    <div>
+      <div class="action-card-header">
+        <div class="action-card-icon" style="background: #FEF3C7; color: #D97706;">📸</div>
+        <span style="background: #FEF3C7; color: #D97706; font-size: 0.82rem; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-full);">Loved Ones</span>
+      </div>
+      <h3>My Loved Ones</h3>
+      <p>See warm photos and listen to loving reassuring voices of your family.</p>
+    </div>
+    <div class="action-card-btn">
+      <span>Open Family Album</span>
+      <span>→</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- Quick Today's Medicines Checklist -->
+<div class="mini-meds-card">
+  <div class="mini-meds-header">
+    <h3>
+      <span>💊</span>
+      <span>Today's Medicine Schedule</span>
+    </h3>
+    <a href="/patient/medicines" style="color: var(--primary); font-weight: 800; font-size: 0.95rem; text-decoration: none;">View Full Schedule →</a>
+  </div>
+
+  <div id="quickMedsContainer">
+    {% for med in medications %}
+    <div class="med-item-row {% if med.taken %}taken{% endif %}" id="med-row-{{ med.id }}">
+      <div class="med-info">
+        <div class="med-icon-box">{{ med.icon }}</div>
+        <div>
+          <strong style="font-size: 1.15rem; color: var(--text-main); display: block;">{{ med.name }}</strong>
+          <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">{{ med.time }} • {{ med.purpose }}</span>
+        </div>
+      </div>
+      <button 
+        type="button" 
+        class="btn-check-med {% if med.taken %}taken{% else %}pending{% endif %}" 
+        onclick="toggleMedQuick({{ med.id }}, this)"
+      >
+        <span>{% if med.taken %}✅ Taken{% else %}⭕ Mark Taken{% endif %}</span>
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Reassuring SOS Button -->
+<button class="sos-banner" onclick="triggerSosModal()">
+  <div class="sos-banner-left">
+    <div class="sos-banner-icon">🆘</div>
+    <div class="sos-banner-text">
+      <h4>EMERGENCY ASSISTANCE (SOS)</h4>
+      <p>Tap anytime if you need help • Immediate alert sent to your caregiver and ambulance</p>
+    </div>
+  </div>
+  <div class="sos-call-pill">
+    Tap for SOS 🚨
+  </div>
+</button>
+
+<!-- SOS Confirmation Modal -->
+<div id="patientSosModal" class="modal-backdrop" aria-hidden="true">
+  <div class="modal-box" style="border: 4px solid var(--sos); text-align: center;">
+    <div style="font-size: 3.5rem; margin-bottom: 12px;">🚨</div>
+    <h2 style="font-family: var(--font-heading); color: var(--sos); font-size: 1.8rem; font-weight: 900; margin-bottom: 8px;">EMERGENCY SOS ALERT</h2>
+    <p style="font-size: 1.05rem; color: var(--text-body); margin-bottom: 20px;">
+      Help alert has been dispatched with your live GPS location in Guwahati. Please stay calm and seated.
+    </p>
+
+    <div style="background: var(--sos-light); border: 1.5px solid #FFCDD2; border-radius: var(--radius-md); padding: 14px; text-align: left; font-size: 0.95rem; margin-bottom: 20px;">
+      <div><strong>Patient:</strong> {{ user.name }} (Age {{ user.age|default(73) }})</div>
+      <div><strong>Status:</strong> Caregiver Rohit Hazarika alerted via SMS & phone</div>
+      <div><strong>Emergency Helpline:</strong> 108 Ambulance notified</div>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+      <a href="tel:108" class="btn-voice-speak" style="flex: 1; background: var(--sos); text-decoration: none; justify-content: center;">
+        <span>🚑</span> Call 108 Ambulance
+      </a>
+      <a href="tel:112" class="btn-voice-speak" style="flex: 1; background: #1E293B; text-decoration: none; justify-content: center;">
+        <span>🚨</span> Call 112 Police
+      </a>
+    </div>
+
+    <button type="button" class="btn-nav-action" style="width: 100%; justify-content: center; padding: 12px;" onclick="closeSosModal()">
+      I am safe now • Close Alert
+    </button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Real-time Clock
+  function updatePatientClock() {
+    const clockEl = document.getElementById('patientClock');
+    const dateEl = document.getElementById('patientDate');
+    const now = new Date();
+    
+    if (clockEl) {
+      clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    if (dateEl) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      dateEl.textContent = now.toLocaleDateString('en-US', options);
+    }
+  }
+  updatePatientClock();
+  setInterval(updatePatientClock, 1000);
+
+  // Greeting Voice
+  document.getElementById('btnListenGreeting').addEventListener('click', () => {
+    sound.playClick();
+    const text = "Good day, {{ user.name }}! Welcome to Remember It. You are safe, comfortable, and loved. Today is a beautiful day in Assam.";
+    speakText(text);
+    showToast('Speaking greeting aloud...');
+  });
+
+  // Daily Mood Check
+  document.querySelectorAll('.btn-mood-option').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      sound.playChime();
+      const mood = btn.getAttribute('data-mood');
+      const emoji = btn.getAttribute('data-emoji');
+      const message = btn.getAttribute('data-message');
+
+      // Update badge
+      document.getElementById('moodBadgeText').textContent = mood;
+      document.getElementById('moodBadgeContainer').querySelector('span:first-child').textContent = emoji;
+
+      // Active styling
+      document.querySelectorAll('.btn-mood-option').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Warm toast and voice reassurance
+      showToast(`Mood recorded: ${emoji} ${mood}`);
+      speakText(message);
+
+      // Save to backend
+      try {
+        await fetch('/api/mood', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mood, emoji })
+        });
+      } catch (e) {}
+    });
+  });
+
+  // Quick toggle med
+  async function toggleMedQuick(medId, btn) {
+    sound.playClick();
+    try {
+      const res = await fetch(`/api/medications/${medId}/toggle`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        const row = document.getElementById(`med-row-${medId}`);
+        if (data.medication.taken) {
+          btn.className = 'btn-check-med taken';
+          btn.innerHTML = '<span>✅ Taken</span>';
+          if (row) row.classList.add('taken');
+          sound.playChime();
+          showToast(`Marked ${data.medication.name} as taken! Wonderful!`);
+          speakText(`Good job! You have taken your ${data.medication.name}.`);
+        } else {
+          btn.className = 'btn-check-med pending';
+          btn.innerHTML = '<span>⭕ Mark Taken</span>';
+          if (row) row.classList.remove('taken');
+          showToast(`Marked ${data.medication.name} as pending.`);
+        }
+      }
+    } catch (e) {
+      showToast('Error updating medicine status.');
+    }
+  }
+
+  // SOS Modal
+  function triggerSosModal() {
+    sound.playClick();
+    document.getElementById('patientSosModal').classList.add('active');
+    speakText('Emergency assistance alert has been triggered. Please stay seated. Help is on the way.');
+    // Call SOS API
+    fetch('/api/sos', { method: 'POST' }).catch(() => {});
+  }
+
+  function closeSosModal() {
+    document.getElementById('patientSosModal').classList.remove('active');
+    showToast('Emergency alert closed.');
+  }
+</script>
+{% endblock %}

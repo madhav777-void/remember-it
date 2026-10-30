@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}Emergency Contacts & SOS Directory | Remember It{% endblock %}
+
+{% block extra_head %}
+<style>
+  .emergency-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .emergency-page-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .emergency-page-title h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-body);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  /* Emergency Priority Card */
+  .emergency-hero-box {
+    background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+    border: 2px solid #FCA5A5;
+    border-radius: var(--radius-xl);
+    padding: 24px 28px;
+    margin-bottom: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .emergency-hero-text h3 {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 900;
+    color: #991B1B;
+    margin-bottom: 4px;
+  }
+
+  .emergency-hero-text p {
+    font-size: 0.96rem;
+    color: #7F1D1D;
+    font-weight: 600;
+  }
+
+  /* Contacts Grid */
+  .contacts-big-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .contact-tile {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+  }
+
+  .contact-tile:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .contact-tile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .contact-tile-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .contact-tile-name {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .contact-tile-role {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .btn-call-direct {
+    background: var(--primary);
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: var(--radius-full);
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px var(--primary-glow);
+    transition: all 0.2s;
+  }
+
+  .btn-call-direct:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-call-direct.sos-emergency {
+    background: var(--sos);
+    box-shadow: 0 4px 12px var(--sos-pulse);
+  }
+
+  .btn-call-direct.sos-emergency:hover {
+    background: var(--sos-hover);
+  }
+
+  /* Test SOS Dispatch Simulator Card */
+  .sos-simulator-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .dispatch-log-box {
+    margin-top: 18px;
+    background: #0F172A;
+    color: #38BDF8;
+    padding: 18px 20px;
+    border-radius: var(--radius-md);
+    font-family: monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="emergency-page-header">
+  <div class="emergency-page-title">
+    <a href="/caregiver" class="btn-back" title="Go back to Dashboard">← Back to Dashboard</a>
+    <h2>🚨 Emergency & Medical Helpline Directory</h2>
+  </div>
+</div>
+
+<!-- Emergency Hero -->
+<div class="emergency-hero-box">
+  <div class="emergency-hero-text">
+    <h3>Emergency Escalation Protocol</h3>
+    <p>Immediate 24/7 priority contacts for patient {{ patient.name }}. All emergency lines are active across Guwahati and North East India.</p>
+  </div>
+  <a href="tel:108" class="btn-call-direct sos-emergency">
+    <span>🚑</span> Dial 108 Ambulance
+  </a>
+</div>
+
+<!-- Contacts Grid -->
+<div class="contacts-big-grid">
+  
+  <!-- 1. Ambulance -->
+  <div class="contact-tile">
+    <div class="contact-tile-header">
+      <div class="contact-tile-icon" style="background: #FEE2E2; border-color: #FECACA;">🚑</div>
+      <div>
+        <div class="contact-tile-name">Assam Emergency Ambulance</div>
+        <div class="contact-tile-role">Dial 108 (Toll-Free 24/7)</div>
+      </div>
+    </div>
+    <a href="tel:108" class="btn-call-direct sos-emergency">
+      <span>📞</span> Call 108 Immediately
+    </a>
+  </div>
+
+  <!-- 2. National Helpline -->
+  <div class="contact-tile">
+    <div class="contact-tile-header">
+      <div class="contact-tile-icon" style="background: #E0E7FF; border-color: #C7D2FE;">🚨</div>
+      <div>
+        <div class="contact-tile-name">National Emergency Response</div>
+        <div class="contact-tile-role">Dial 112 (Police & Medical)</div>
+      </div>
+    </div>
+    <a href="tel:112" class="btn-call-direct" style="background: #1E293B;">
+      <span>📞</span> Call 112 Helpline
+    </a>
+  </div>
+
+  <!-- 3. Neurologist Doctor -->
+  <div class="contact-tile">
+    <div class="contact-tile-header">
+      <div class="contact-tile-icon" style="background: #E0F2FE; border-color: #BAE6FD;">👨‍⚕️</div>
+      <div>
+        <div class="contact-tile-name">Dr. Sharma (Neurologist)</div>
+        <div class="contact-tile-role">Consulting Dementia Specialist</div>
+      </div>
+    </div>
+    <a href="tel:+919435012345" class="btn-call-direct">
+      <span>📞</span> Call +91 94350 12345
+    </a>
+  </div>
+
+  <!-- 4. Primary Family Contact -->
+  <div class="contact-tile">
+    <div class="contact-tile-header">
+      <div class="contact-tile-icon" style="background: #FEF3C7; border-color: #FDE68A;">👨‍💼</div>
+      <div>
+        <div class="contact-tile-name">Rohit Hazarika (Son)</div>
+        <div class="contact-tile-role">Primary Family Caregiver</div>
+      </div>
+    </div>
+    <a href="tel:+919864054321" class="btn-call-direct">
+      <span>📞</span> Call +91 98640 54321
+    </a>
+  </div>
+
+  <!-- 5. Hospital Clinic -->
+  <div class="contact-tile">
+    <div class="contact-tile-header">
+      <div class="contact-tile-icon" style="background: #ECFDF5; border-color: #A7F3D0;">🏥</div>
+      <div>
+        <div class="contact-tile-name">Guwahati Medical College Hospital</div>
+        <div class="contact-tile-role">Casualty & Memory Clinic Unit</div>
+      </div>
+    </div>
+    <a href="tel:+913612234567" class="btn-call-direct">
+      <span>📞</span> Call +91 361 223 4567
+    </a>
+  </div>
+
+  <!-- 6. Dementia Support Helpline -->
+  <div class="contact-tile">
+    <div class="contact-tile-header">
+      <div class="contact-tile-icon" style="background: #F3E8FF; border-color: #DDD6FE;">🧠</div>
+      <div>
+        <div class="contact-tile-name">Dementia India National Helpline</div>
+        <div class="contact-tile-role">Caregiver Counseling & Support</div>
+      </div>
+    </div>
+    <a href="tel:1800114033" class="btn-call-direct">
+      <span>📞</span> Call 1800-11-4033
+    </a>
+  </div>
+
+</div>
+
+<!-- SOS Simulator -->
+<div class="sos-simulator-card">
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 14px;">
+    <div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; color: var(--text-main);">
+        Simulate Live Emergency SOS Dispatch
+      </h3>
+      <p style="font-size: 0.95rem; color: var(--text-muted); font-weight: 600;">
+        Test the real-time alert pipeline with patient GPS telemetry and dispatch logging.
+      </p>
+    </div>
+    <button class="btn-call-direct sos-emergency" onclick="testSosDispatch()">
+      <span>🚨</span> Trigger Test Dispatch
+    </button>
+  </div>
+
+  <div id="dispatchLog" class="dispatch-log-box">
+    <!-- Log printed dynamically -->
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  async function testSosDispatch() {
+    sound.playClick();
+    const logBox = document.getElementById('dispatchLog');
+    logBox.style.display = 'block';
+    logBox.innerHTML = 'Connecting to Remember It emergency relay...<br>';
+
+    try {
+      const res = await fetch('/api/sos', { method: 'POST' });
+      const data = await res.json();
+      sound.playChime();
+      showToast('Emergency SOS dispatch verified!');
+      logBox.innerHTML = `
+[DISPATCH VERIFIED - STATUS: ${data.status}]<br>
+Target Patient: ${data.patient}<br>
+Safe Zone: ${data.location}<br>
+Coordinates: Lat ${data.coordinates.lat}, Lng ${data.coordinates.lng}<br>
+Contacts Alerted: 108 Ambulance, 112 National Police, Dr. Sharma (+91-94350-12345), Rohit Hazarika (+91-98640-54321)<br>
+Timestamp: ${new Date().toISOString()}<br>
+Alert Pipeline: Active & Healthy.
+      `;
+    } catch (e) {
+      logBox.innerHTML += 'Error dispatching SOS simulation.';
+    }
+  }
+</script>
+{% endblock %}

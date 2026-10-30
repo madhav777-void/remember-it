@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% block title %}3D Brain Memory Game | Remember It{% endblock %}
+
+{% block extra_head %}
+<style>
+  .game-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .game-page-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .game-page-title h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-body);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  /* Game Container Card */
+  .game-box-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+  }
+
+  .game-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .game-instructions-box {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .game-stats-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat-badge {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-restart-game {
+    background: var(--surface-alt);
+    border: 2px solid var(--surface-border);
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-main);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+
+  .btn-restart-game:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  /* ── 3D Physics Flip Cards Grid ────────────────────────────────────────── */
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    perspective: 1200px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 640px) {
+    .memory-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+  }
+
+  .memory-card {
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .memory-card:active {
+    transform: scale(0.96);
+  }
+
+  .memory-card.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .memory-card.matched {
+    transform: rotateY(180deg) scale(0.96);
+    pointer-events: none;
+  }
+
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+  }
+
+  /* Card Front: High-contrast tactile pattern */
+  .card-front {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    border: 3px solid #FFFFFF;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-front::after {
+    content: '🌱';
+    font-size: 2.6rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  /* Card Back: Revealed image + title with smooth physics */
+  .card-back {
+    background: #FFFFFF;
+    border: 3px solid var(--primary-light);
+    transform: rotateY(180deg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-emoji {
+    font-size: 2.8rem;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.2;
+  }
+
+  /* Celebratory Victory Banner */
+  .victory-banner {
+    display: none;
+    background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+    border: 2px solid #6EE7B7;
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    text-align: center;
+    margin-top: 24px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .victory-banner.show {
+    display: block;
+  }
+
+  .victory-banner h3 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #065F46;
+    margin-bottom: 6px;
+  }
+
+  .victory-banner p {
+    font-size: 1.05rem;
+    color: #047857;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="game-page-header">
+  <div class="game-page-title">
+    <a href="/patient" class="btn-back" title="Go back to Home">← Back to Home</a>
+    <h2>🧩 Memory Match Brain Game</h2>
+  </div>
+  <button id="btnRestartGame" class="btn-restart-game">
+    <span>🔄</span>
+    <span>Shuffle & Restart</span>
+  </button>
+</div>
+
+<!-- Game Board Card -->
+<div class="game-box-card">
+  
+  <div class="game-header-bar">
+    <div class="game-instructions-box">
+      Tap two cards at a time to reveal matching pairs of iconic North East cultural treasures!
+    </div>
+    
+    <div class="game-stats-row">
+      <div id="gameMoves" class="stat-badge">
+        <span>🔄 Moves:</span>
+        <strong id="movesVal">0</strong>
+      </div>
+      <div id="gameMatches" class="stat-badge">
+        <span>⭐ Matches:</span>
+        <strong id="matchesVal">0 / 6</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D Physics Flip Cards Grid -->
+  <div id="memoryGrid" class="memory-grid" role="region" aria-label="Memory Card Grid">
+    <!-- Populated by JavaScript -->
+  </div>
+
+  <!-- Victory Box -->
+  <div id="victoryBox" class="victory-banner">
+    <div style="font-size: 3.5rem; margin-bottom: 8px;">🎉</div>
+    <h3>Wonderful Job, {{ user.name }}!</h3>
+    <p>You matched all 6 North East cultural pairs. Your cognitive focus is sharp and active!</p>
+    <button class="btn-voice-speak" style="margin: 0 auto;" onclick="initMemoryGame()">
+      <span>🔄</span> Play Again
+    </button>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  /**
+   * ==========================================================================
+   * 3D Physics Memory Match Game Engine
+   * Exactly preserves 12 cards (6 pairs): 🦏 🍵 🦌 🌉 🌸 🥁
+   * Fisher-Yates shuffle
+   * Web Audio Fanfare on win + cognitive score dispatch
+   * ==========================================================================
+   */
+  const items = [
+    { id: 1, emoji: '🦏', title: 'One-Horned Rhino' },
+    { id: 2, emoji: '🍵', title: 'Assam Green Tea' },
+    { id: 3, emoji: '🦌', title: 'Sangai Deer' },
+    { id: 4, emoji: '🌉', title: 'Root Bridge' },
+    { id: 5, emoji: '🌸', title: 'Anthurium Flower' },
+    { id: 6, emoji: '🥁', title: 'Bihu Dhol' }
+  ];
+
+  let memoryCards = [];
+  let flippedCards = [];
+  let matchedPairs = 0;
+  let moves = 0;
+
+  function initMemoryGame() {
+    // Hide victory box
+    document.getElementById('victoryBox').classList.remove('show');
+
+    // Duplicate for pairs and assign unique IDs
+    const deck = [...items, ...items].map((item, idx) => ({
+      ...item,
+      uniqueId: idx
+    }));
+
+    // Fisher-Yates shuffle
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+
+    memoryCards = deck;
+    flippedCards = [];
+    matchedPairs = 0;
+    moves = 0;
+
+    renderMemoryGame();
+  }
+
+  function renderMemoryGame() {
+    const grid = document.getElementById('memoryGrid');
+    const movesVal = document.getElementById('movesVal');
+    const matchesVal = document.getElementById('matchesVal');
+    if (!grid) return;
+
+    if (movesVal) movesVal.textContent = moves;
+    if (matchesVal) matchesVal.textContent = `${matchedPairs} / 6`;
+
+    grid.innerHTML = memoryCards.map((card, idx) => `
+      <div class="memory-card" data-idx="${idx}">
+        <div class="card-front"></div>
+        <div class="card-back">
+          <span class="card-emoji">${card.emoji}</span>
+          <span class="card-title">${card.title}</span>
+        </div>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.memory-card').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.getAttribute('data-idx'), 10);
+        flipMemoryCard(idx, el);
+      });
+    });
+  }
+
+  function flipMemoryCard(idx, el) {
+    if (flippedCards.length >= 2 || el.classList.contains('flipped') || el.classList.contains('matched')) {
+      return;
+    }
+
+    sound.playClick();
+    el.classList.add('flipped');
+    flippedCards.push({ idx, card: memoryCards[idx], el });
+
+    if (flippedCards.length === 2) {
+      moves++;
+      const movesVal = document.getElementById('movesVal');
+      if (movesVal) movesVal.textContent = moves;
+
+      const [first, second] = flippedCards;
+      if (first.card.id === second.card.id) {
+        // MATCH!
+        setTimeout(() => {
+          first.el.classList.add('matched');
+          second.el.classList.add('matched');
+          matchedPairs++;
+          const matchesVal = document.getElementById('matchesVal');
+          if (matchesVal) matchesVal.textContent = `${matchedPairs} / 6`;
+          flippedCards = [];
+          sound.playChime();
+
+          if (matchedPairs === 6) {
+            setTimeout(() => {
+              sound.playFanfare();
+              document.getElementById('victoryBox').classList.add('show');
+              showToast('🎉 Wonderful job! All memory pairs matched!');
+              speakText('Wonderful job, {{ user.name }}! You completed all the memory matches!');
+              // Record score to Python backend
+              fetch('/api/scores', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ score: 95, moves: moves, day: 'Today' })
+              }).catch(() => {});
+            }, 300);
+          }
+        }, 350);
+      } else {
+        // No match - smooth physics flip back
+        setTimeout(() => {
+          first.el.classList.remove('flipped');
+          second.el.classList.remove('flipped');
+          flippedCards = [];
+        }, 850);
+      }
+    }
+  }
+
+  document.getElementById('btnRestartGame').addEventListener('click', () => {
+    sound.playClick();
+    initMemoryGame();
+    showToast('Deck shuffled! Have fun!');
+  });
+
+  // Launch game on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    initMemoryGame();
+  });
+</script>
+{% endblock %}

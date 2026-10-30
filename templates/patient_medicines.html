@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Medicines | Remember It{% endblock %}
+
+{% block extra_head %}
+<style>
+  .page-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .page-header-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .page-header-title h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-body);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  /* Filter & Status Bar */
+  .meds-filter-bar {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .filter-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill-btn {
+    border: 1.5px solid var(--surface-border);
+    background: var(--surface-alt);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-pill-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .filter-pill-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #FFFFFF;
+  }
+
+  .summary-pill {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    border: 1px solid #B2DFDB;
+  }
+
+  /* Big Medicine Cards */
+  .med-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .med-detail-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+  }
+
+  .med-detail-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .med-detail-card.taken {
+    background: #F0FDF4;
+    border-color: #86EFAC;
+  }
+
+  .med-detail-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .med-large-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-lg);
+    background: var(--surface-alt);
+    border: 2px solid var(--surface-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .med-detail-card.taken .med-large-icon {
+    background: #DCFCE7;
+    border-color: #86EFAC;
+  }
+
+  .med-name-heading {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .med-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .med-time-tag {
+    background: var(--surface-alt);
+    border: 1px solid var(--surface-border);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .med-purpose-text {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .btn-take-pill {
+    min-width: 170px;
+    border: none;
+    padding: 16px 24px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-take-pill.pending {
+    background: var(--secondary-light);
+    color: var(--secondary);
+    border: 2px solid #FDBA74;
+  }
+
+  .btn-take-pill.pending:hover {
+    background: var(--secondary);
+    color: #FFFFFF;
+    transform: scale(1.02);
+  }
+
+  .btn-take-pill.taken {
+    background: #DCFCE7;
+    color: #15803D;
+    border: 2px solid #86EFAC;
+  }
+
+  /* Safe Reminder Banner */
+  .med-reminder-banner {
+    background: #FEF3C7;
+    border: 2px solid #FCD34D;
+    border-radius: var(--radius-xl);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .med-reminder-banner p {
+    font-size: 1rem;
+    color: #92400E;
+    font-weight: 600;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header-row">
+  <div class="page-header-title">
+    <a href="/patient" class="btn-back" title="Go back to Home">← Back to Home</a>
+    <h2>💊 Daily Medicine Checklist</h2>
+  </div>
+  <button id="btnSpeakSchedule" class="btn-voice-speak">
+    <span>🔊</span>
+    <span>Read Schedule Aloud</span>
+  </button>
+</div>
+
+<!-- Reminder Banner -->
+<div class="med-reminder-banner">
+  <span style="font-size: 2rem;">💧</span>
+  <div>
+    <strong style="color: #78350F; font-size: 1.05rem;">Health Reminder:</strong>
+    <p>Always drink a full glass of clean, lukewarm water when taking medications. If you ever feel dizzy, tap Emergency Help.</p>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="meds-filter-bar">
+  <div class="filter-pills">
+    <button class="filter-pill-btn active" data-filter="all">All Medicines</button>
+    <button class="filter-pill-btn" data-filter="Morning">Morning</button>
+    <button class="filter-pill-btn" data-filter="Afternoon">Afternoon</button>
+    <button class="filter-pill-btn" data-filter="Evening">Evening</button>
+  </div>
+  <div id="medsStatusSummary" class="summary-pill">
+    Tap buttons below when taken
+  </div>
+</div>
+
+<!-- Medicine Cards List -->
+<div class="med-cards-list" id="medicinesContainer">
+  {% for med in medications %}
+  <div class="med-detail-card {% if med.taken %}taken{% endif %}" data-time="{{ med.time }}" id="med-card-{{ med.id }}">
+    <div class="med-detail-left">
+      <div class="med-large-icon">{{ med.icon }}</div>
+      <div>
+        <div class="med-name-heading">{{ med.name }}</div>
+        <div class="med-meta-row">
+          <span class="med-time-tag">⏰ {{ med.time }}</span>
+          <span class="med-purpose-text">🌿 {{ med.purpose }}</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button 
+        type="button" 
+        class="btn-take-pill {% if med.taken %}taken{% else %}pending{% endif %}" 
+        onclick="toggleMedDetail({{ med.id }}, this)"
+      >
+        <span>{% if med.taken %}✅ Taken with Water{% else %}⭕ Mark as Taken{% endif %}</span>
+      </button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Medicine Filter Logic
+  const filterBtns = document.querySelectorAll('.filter-pill-btn');
+  const medCards = document.querySelectorAll('.med-detail-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sound.playClick();
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.getAttribute('data-filter');
+      medCards.forEach(card => {
+        if (filter === 'all') {
+          card.style.display = 'flex';
+        } else {
+          const time = card.getAttribute('data-time') || '';
+          if (time.toLowerCase().includes(filter.toLowerCase())) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+
+  // Toggle Medicine Detail
+  async function toggleMedDetail(medId, btn) {
+    sound.playClick();
+    try {
+      const res = await fetch(`/api/medications/${medId}/toggle`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        const card = document.getElementById(`med-card-${medId}`);
+        if (data.medication.taken) {
+          btn.className = 'btn-take-pill taken';
+          btn.innerHTML = '<span>✅ Taken with Water</span>';
+          if (card) card.classList.add('taken');
+          sound.playChime();
+          showToast(`Marked ${data.medication.name} as completed!`);
+          speakText(`Wonderful job! You have taken your ${data.medication.name}.`);
+        } else {
+          btn.className = 'btn-take-pill pending';
+          btn.innerHTML = '<span>⭕ Mark as Taken</span>';
+          if (card) card.classList.remove('taken');
+          showToast(`Marked ${data.medication.name} as pending.`);
+        }
+      }
+    } catch (e) {
+      showToast('Error updating medicine status.');
+    }
+  }
+
+  // Voice Readout of Schedule
+  document.getElementById('btnSpeakSchedule').addEventListener('click', () => {
+    sound.playClick();
+    const cards = document.querySelectorAll('.med-detail-card');
+    let speech = "Here is your medication plan for today. ";
+    cards.forEach((card, index) => {
+      const name = card.querySelector('.med-name-heading').textContent.trim();
+      const time = card.querySelector('.med-time-tag').textContent.trim();
+      const isTaken = card.classList.contains('taken') ? "already taken" : "scheduled to be taken";
+      speech += `Dose ${index + 1}: ${name}, at ${time}, which is ${isTaken}. `;
+    });
+    speech += "Remember to drink fresh water with each tablet.";
+    speakText(speech);
+    showToast('Reading medicine schedule aloud...');
+  });
+</script>
+{% endblock %}

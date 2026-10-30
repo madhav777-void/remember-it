@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}My Loved Ones | Remember It{% endblock %}
+
+{% block extra_head %}
+<style>
+  .family-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .family-page-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .family-page-title h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-body);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  /* Album Reassurance Banner */
+  .album-banner {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%);
+    border: 2px solid #FCD34D;
+    border-radius: var(--radius-xl);
+    padding: 22px 28px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .album-banner-icon {
+    font-size: 2.4rem;
+  }
+
+  .album-banner-text h3 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #78350F;
+    margin-bottom: 4px;
+  }
+
+  .album-banner-text p {
+    font-size: 1rem;
+    color: #92400E;
+    font-weight: 600;
+  }
+
+  /* Family Cards Grid */
+  .family-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+
+  .family-card-item {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 28px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .family-card-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .family-avatar-large {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    margin-bottom: 16px;
+    border: 4px solid #FFFFFF;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+
+  .family-member-name {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 4px;
+  }
+
+  .family-member-relation {
+    font-size: 0.95rem;
+    color: var(--primary);
+    font-weight: 700;
+    background: var(--primary-light);
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    margin-bottom: 14px;
+    display: inline-block;
+  }
+
+  .family-member-quote {
+    font-size: 0.96rem;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.45;
+    margin-bottom: 20px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-family-voice {
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 22px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px var(--primary-glow);
+    transition: transform 0.15s, background-color 0.2s;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-family-voice:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="family-page-header">
+  <div class="family-page-title">
+    <a href="/patient" class="btn-back" title="Go back to Home">← Back to Home</a>
+    <h2>📸 My Loved Ones & Family</h2>
+  </div>
+  <button class="btn-voice-speak" onclick="playAllFamily()">
+    <span>🔊</span>
+    <span>Play Family Messages</span>
+  </button>
+</div>
+
+<!-- Comforting Banner -->
+<div class="album-banner">
+  <div class="album-banner-icon">🌸</div>
+  <div class="album-banner-text">
+    <h3>You Are Deeply Loved, {{ user.name }}</h3>
+    <p>Tap on any of your family members below to hear their gentle, loving voice reminding you that you are safe at home.</p>
+  </div>
+</div>
+
+<!-- Family Album Cards Grid -->
+<div class="family-cards-grid">
+  {% for member in family_members %}
+  <div class="family-card-item" id="family-member-{{ member.id }}">
+    <div class="family-avatar-large" style="background-color: {{ member.color }};">
+      {{ member.avatar }}
+    </div>
+    <h3 class="family-member-name">{{ member.name }}</h3>
+    <span class="family-member-relation">{{ member.relation }}</span>
+    <p class="family-member-quote">"{{ member.speech }}"</p>
+    <button 
+      type="button" 
+      class="btn-family-voice" 
+      onclick="speakFamilyMember('{{ member.name }}', '{{ member.speech }}')"
+    >
+      <span>🔊</span>
+      <span>Hear Loving Voice</span>
+    </button>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function speakFamilyMember(name, speech) {
+    sound.playChime();
+    showToast(`Listening to ${name}'s voice...`);
+    speakText(speech);
+  }
+
+  function playAllFamily() {
+    sound.playClick();
+    const fullSpeech = "You are safe at home in Guwahati, surrounded by your loved ones. Sunita, your beloved wife of 48 years is here. Your son Rohit calls every afternoon and loves you deeply. Your daughter Ananya has prepared your warm tea. You are safe, respected, and cherished.";
+    speakText(fullSpeech);
+    showToast('Playing family reassurance message...');
+  }
+</script>
+{% endblock %}

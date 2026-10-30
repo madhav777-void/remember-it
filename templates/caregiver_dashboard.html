@@ -1,0 +1,505 @@
+{% extends "base.html" %}
+
+{% block title %}Caregiver Dashboard | Remember It{% endblock %}
+
+{% block extra_head %}
+<style>
+  .caregiver-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .caregiver-page-header h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  /* Connected Patient Overview Card */
+  .patient-summary-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 26px;
+  }
+
+  .patient-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .patient-avatar-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    border: 2px solid #B2DFDB;
+  }
+
+  .patient-details h3 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .patient-details p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .patient-status-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge-safe {
+    background: #DCFCE7;
+    color: #15803D;
+    border: 1.5px solid #86EFAC;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .badge-mood {
+    background: #E0F2FE;
+    color: #0369A1;
+    border: 1.5px solid #BAE6FD;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Live Vitals Grid */
+  .vitals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1.5px solid var(--surface-border);
+  }
+
+  @media (max-width: 768px) {
+    .vitals-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .vital-card {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .vital-label {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .vital-value {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .vital-status {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  /* Content Cards */
+  .section-card {
+    background: var(--surface);
+    border: 2px solid var(--surface-border);
+    border-radius: var(--radius-xl);
+    padding: 26px 28px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 26px;
+  }
+
+  .section-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .section-card-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Caregiver Meds Table */
+  .caregiver-meds-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .caregiver-med-item {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .med-status-pill {
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  .med-status-pill.taken {
+    background: #DCFCE7;
+    color: #15803D;
+  }
+
+  .med-status-pill.pending {
+    background: var(--secondary-light);
+    color: var(--secondary);
+  }
+
+  /* SVG Cognitive Chart */
+  .chart-container-box {
+    background: var(--surface-alt);
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+
+  .chart-svg {
+    width: 100%;
+    height: 180px;
+    overflow: visible;
+  }
+
+  .chart-days-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 10px 0;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--text-muted);
+  }
+
+  /* Add Med Modal Form */
+  .form-group-modal {
+    margin-bottom: 16px;
+  }
+
+  .form-group-modal label {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 6px;
+  }
+
+  .form-group-modal input, .form-group-modal select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--surface-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 1rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="caregiver-page-header">
+  <div>
+    <h2>🩺 Caregiver Health Dashboard</h2>
+    <p style="color: var(--text-muted); font-weight: 600;">Oversight portal for family member {{ user.name }} ({{ user.relation|default('Caregiver') }})</p>
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <a href="/caregiver/emergency" class="btn-voice-speak" style="background: var(--sos); text-decoration: none;">
+      <span>🚨</span> Emergency Directory
+    </a>
+  </div>
+</div>
+
+<!-- Connected Patient Overview Card -->
+<div class="patient-summary-card">
+  <div class="patient-header-row">
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div class="patient-avatar-box">🧓</div>
+      <div class="patient-details">
+        <h3>{{ patient.name }} (Linked Patient)</h3>
+        <p>Age: {{ patient.age }} • Mild Cognitive Impairment (Dementia Stage 2)</p>
+      </div>
+    </div>
+    
+    <div class="patient-status-badges">
+      <div class="badge-safe">
+        <span>🟢</span>
+        <span>Inside Safe Zone (Home)</span>
+      </div>
+      <div class="badge-mood">
+        <span>{{ patient.last_mood.emoji if patient.last_mood else '😊' }}</span>
+        <span>Today's Mood: {{ patient.last_mood.label if patient.last_mood else 'Happy & Calm' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vitals Row -->
+  <div class="vitals-grid">
+    <div class="vital-card">
+      <span class="vital-label">Heart Rate</span>
+      <div class="vital-value">74 <small style="font-size: 0.9rem; font-weight: 600;">bpm</small></div>
+      <span class="vital-status">🟢 Normal & Steady</span>
+    </div>
+    
+    <div class="vital-card">
+      <span class="vital-label">Blood Pressure</span>
+      <div class="vital-value">120/80 <small style="font-size: 0.9rem; font-weight: 600;">mmHg</small></div>
+      <span class="vital-status">🟢 Optimal Range</span>
+    </div>
+
+    <div class="vital-card">
+      <span class="vital-label">Geofence Location</span>
+      <div class="vital-value" style="font-size: 1.25rem;">Guwahati</div>
+      <span class="vital-status">Safe at Residence</span>
+    </div>
+
+    <div class="vital-card">
+      <span class="vital-label">Companion Battery</span>
+      <div class="vital-value">88%</div>
+      <span class="vital-status">🟢 High Battery</span>
+    </div>
+  </div>
+</div>
+
+<!-- Prescription & Medication Administration -->
+<div class="section-card">
+  <div class="section-card-header">
+    <h3>
+      <span>📋</span>
+      <span>Prescription & Medication Adherence</span>
+    </h3>
+    <button type="button" class="btn-voice-speak" onclick="openAddMedModal()">
+      <span>+</span>
+      <span>Add New Medicine</span>
+    </button>
+  </div>
+
+  <div class="caregiver-meds-list" id="caregiverMedsList">
+    {% for med in medications %}
+    <div class="caregiver-med-item">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="font-size: 1.8rem;">{{ med.icon }}</span>
+        <div>
+          <strong style="font-size: 1.15rem; color: var(--text-main); display: block;">{{ med.name }}</strong>
+          <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">{{ med.time }} • {{ med.purpose }}</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="med-status-pill {% if med.taken %}taken{% else %}pending{% endif %}">
+          {% if med.taken %}✅ Taken Today{% else %}⏳ Dose Pending{% endif %}
+        </span>
+        <button 
+          type="button" 
+          class="btn-nav-action" 
+          onclick="toggleMedCaregiver({{ med.id }}, this)"
+        >
+          Toggle Status
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- 7-Day Cognitive Score Trend Chart -->
+<div class="section-card">
+  <div class="section-card-header">
+    <h3>
+      <span>📊</span>
+      <span>7-Day Cognitive Score & Focus Trend</span>
+    </h3>
+    <span style="background: var(--primary-light); color: var(--primary); font-weight: 800; padding: 6px 14px; border-radius: var(--radius-full); font-size: 0.9rem;">
+      Weekly Average: 84 / 100
+    </span>
+  </div>
+
+  <div class="chart-container-box">
+    <svg id="cognitiveChartSvg" class="chart-svg" viewBox="0 0 500 180" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#2E7D6E" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#2E7D6E" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+      <!-- Area fill -->
+      <polygon 
+        points="30,60 100,45 170,30 240,55 310,25 380,38 450,20 450,170 30,170" 
+        fill="url(#chartGrad)"
+      />
+      <!-- Trend curve line -->
+      <polyline 
+        points="30,60 100,45 170,30 240,55 310,25 380,38 450,20" 
+        fill="none" 
+        stroke="#2E7D6E" 
+        stroke-width="3.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+      />
+      <!-- Interactive Data dots -->
+      <circle cx="30" cy="60" r="5" fill="#FFFFFF" stroke="#2E7D6E" stroke-width="3"/>
+      <circle cx="100" cy="45" r="5" fill="#FFFFFF" stroke="#2E7D6E" stroke-width="3"/>
+      <circle cx="170" cy="30" r="5" fill="#FFFFFF" stroke="#2E7D6E" stroke-width="3"/>
+      <circle cx="240" cy="55" r="5" fill="#FFFFFF" stroke="#2E7D6E" stroke-width="3"/>
+      <circle cx="310" cy="25" r="5" fill="#FFFFFF" stroke="#2E7D6E" stroke-width="3"/>
+      <circle cx="380" cy="38" r="5" fill="#FFFFFF" stroke="#2E7D6E" stroke-width="3"/>
+      <circle cx="450" cy="20" r="6" fill="#FFFFFF" stroke="#E87C3E" stroke-width="3.5"/>
+    </svg>
+    <div class="chart-days-row">
+      <span>Mon (75)</span>
+      <span>Tue (82)</span>
+      <span>Wed (88)</span>
+      <span>Thu (78)</span>
+      <span>Fri (90)</span>
+      <span>Sat (85)</span>
+      <span style="color: var(--primary);">Today (92)</span>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add New Medication -->
+<div id="modalAddMed" class="modal-backdrop" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add Prescribed Medication</h3>
+      <button class="btn-close-modal" onclick="closeAddMedModal()">&times;</button>
+    </div>
+    
+    <form id="formAddMedicine" onsubmit="submitNewMed(event)">
+      <div class="form-group-modal">
+        <label for="inputMedName">Medicine Name & Strength</label>
+        <input type="text" id="inputMedName" placeholder="e.g. Donepezil 5mg" required>
+      </div>
+
+      <div class="form-group-modal">
+        <label for="inputMedTime">Scheduled Intake Time</label>
+        <select id="inputMedTime">
+          <option value="Morning (08:00 AM)">Morning (08:00 AM)</option>
+          <option value="Afternoon (01:00 PM)">Afternoon (01:00 PM)</option>
+          <option value="Evening (07:30 PM)">Evening (07:30 PM)</option>
+          <option value="Bedtime (09:30 PM)">Bedtime (09:30 PM)</option>
+        </select>
+      </div>
+
+      <div class="form-group-modal">
+        <label for="inputMedPurpose">Therapeutic Purpose / Instructions</label>
+        <input type="text" id="inputMedPurpose" placeholder="e.g. Memory & Cognitive Support">
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn-nav-action" onclick="closeAddMedModal()">Cancel</button>
+        <button type="submit" class="btn-voice-speak">Save Prescription</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function openAddMedModal() {
+    sound.playClick();
+    document.getElementById('modalAddMed').classList.add('active');
+  }
+
+  function closeAddMedModal() {
+    document.getElementById('modalAddMed').classList.remove('active');
+  }
+
+  async function submitNewMed(e) {
+    e.preventDefault();
+    sound.playClick();
+    const name = document.getElementById('inputMedName').value.trim();
+    const time = document.getElementById('inputMedTime').value;
+    const purpose = document.getElementById('inputMedPurpose').value.trim();
+
+    try {
+      const res = await fetch('/api/medications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, time, purpose })
+      });
+      const data = await res.json();
+      if (data.success) {
+        closeAddMedModal();
+        showToast(`Prescription for ${name} added successfully!`);
+        sound.playChime();
+        setTimeout(() => window.location.reload(), 600);
+      }
+    } catch (err) {
+      showToast('Error adding medication.');
+    }
+  }
+
+  async function toggleMedCaregiver(medId, btn) {
+    sound.playClick();
+    try {
+      const res = await fetch(`/api/medications/${medId}/toggle`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Updated status for ${data.medication.name}`);
+        setTimeout(() => window.location.reload(), 400);
+      }
+    } catch (e) {
+      showToast('Error toggling medication.');
+    }
+  }
+</script>
+{% endblock %}
